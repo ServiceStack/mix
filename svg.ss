@@ -23,7 +23,7 @@
         {{ textFiles.putItem(`${group}\\${file.Name}`, file.textContents()) | end }}
     {{/each}}
 
-    Writing to {{textFiles | dump}} .svg's to {{group}} '{{gistId}}' ...
+    Writing to {{textFiles | count}} .svg's to {{group}} '{{gistId}}' ...
     {{ vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: svgGist }}
     {{ svgGist.writeTextFiles(textFiles) }}
 {{/each}}
