@@ -11,11 +11,10 @@
     | assignTo: svgGroups
 }}
 
-{{#each entry in svgGroups}}
-    {{entry.Key   | assignTo: group}}
-    {{entry.Value | assignTo: gistId}}
+{{#each group in svgGroups.Keys}}
+    {{svgGroups[group] | assignTo: gistId}}
 
-    SVG GROUP {{group}} ({{gistId}}):
+    Updating SVG {{group}} '{{gistId}}':
 
     {{ {} | assignTo: textFiles }}
 
@@ -24,7 +23,9 @@
         {{ textFiles.putItem(`${group}\\${file.VirtualPath.replace('/','\\')}`, fs.fileTextContents(file.VirtualPath)) | end }}
     {{/each}}
 
-    Writing to {{textFiles | count}} .svg's to '{{gistId}}' ...
+    Writing to {{textFiles | count}} .svg's to {{group}} '{{gistId}}' ...
+    {{#noop}}
     {{ vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: svgGist }}
     {{ svgGist.writeTextFiles(textFiles) }}
+    {{/noop}}
 {{/each}}
