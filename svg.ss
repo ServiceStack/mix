@@ -20,12 +20,10 @@
 
     {{ vfsFileSystem(`svg/${group}`) | assignTo: fs }}
     {{#each file in fs.findFiles(`*.svg`) }}
-        {{ textFiles.putItem(`${group}\\${file.VirtualPath.replace('/','\\')}`, fs.fileTextContents(file.VirtualPath)) | end }}
+        {{ textFiles.putItem(`${group}\\${file.Name}`, file.textContents()) | end }}
     {{/each}}
 
-    Writing to {{textFiles | count}} .svg's to {{group}} '{{gistId}}' ...
-    {{#noop}}
+    Writing to {{textFiles | dump}} .svg's to {{group}} '{{gistId}}' ...
     {{ vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: svgGist }}
     {{ svgGist.writeTextFiles(textFiles) }}
-    {{/noop}}
 {{/each}}
