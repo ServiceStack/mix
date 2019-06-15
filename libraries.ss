@@ -15,7 +15,6 @@
 
     {{ vfsFileSystem(`libraries/${group}`) | assignTo: fs }}
     {{#each file in fs.allFiles()}}
-        {{file.VirtualPath}}
         {{ textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end }}
     {{/each}}
 
