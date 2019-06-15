@@ -24,6 +24,6 @@
     {{/each}}
 
     Writing to {{textFiles | count}} .svg's to {{group}} '{{gistId}}' ...
-    {{ vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: svgGist }}
-    {{ svgGist.writeTextFiles(textFiles) }}
+    {{ vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist }}
+    {{ gist.writeTextFiles(textFiles) }}
 {{/each}}
