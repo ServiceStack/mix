@@ -1,0 +1,68 @@
+<!--
+title: MQ Examples
+-->
+
+<div class="row justify-content-between pt-3">
+    <div class="col">
+        <p>Test MQ</p>
+        <button data-click="incr:-1">-</button>
+        <button data-click="incr:1">+</button>
+        <input type="text" id="txtName" value="Test" placeholder="Name" data-input="incr:0">
+        <div class="pt-1">
+            <input id="chkOneWay" type="checkbox" checked>
+            <label for="chkOneWay">Publish to One Way endpoint</label>
+        </div>
+        <div class="py-2">
+            <button data-click="refresh">refresh</button>
+        </div>
+        <dl>
+            <dt>Name:</dt>
+            <dd id="name"></dd>
+            <dt>Counter:</dt>
+            <dd id="counter"></dd>
+        </dl>
+    </div>
+    <div class="col">
+        <pre id="mqstats">{{ mqService.mqStatsDescription() }}</pre>        
+    </div>
+</div>
+
+{{#raw appendTo scripts}}
+<script>
+
+    var timeout,
+        $name = document.getElementById("name"),
+        $counter = document.getElementById("counter"),
+        $mqstats = document.getElementById("mqstats"),
+        $txtName = document.getElementById("txtName"),
+        $chkOneWay = document.getElementById("chkOneWay");
+
+    function refresh() {
+        client.get(new TestMq())
+            .then(function(r) {
+                $name.innerHTML = r.name;
+                $counter.innerHTML = r.counter;
+                $mqstats.innerHTML = r.statsDescription;
+            });
+        timeout = null;
+    }
+
+    function refreshTimeout() { 
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(refresh, 500);
+    }
+
+    bindHandlers({
+        incr(add) {
+            if ($chkOneWay.checked) {
+                client.publish(new TestMq({ name:$txtName.value, add:parseInt(add,10) }))
+                    .then(refreshTimeout);
+            } else {
+                client.post(new PublishMq({ name:$txtName.value, add:parseInt(add,10) }))
+                    .then(refreshTimeout);
+            }
+        },
+        refresh: refresh
+    });
+</script>
+{{/raw}}
