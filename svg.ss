@@ -1,3 +1,7 @@
+```code
+* Update /svg mix gists       *
+* Usage: web run svg.ss <id>? *
+
 {{
 	{ 
 		action:        '3fee3e0e37c4e82627ebcfe938feb2ef',
@@ -16,28 +20,28 @@
 		social:        '4c7ff759a722a5b0b9a960c52091d8cb',
 		toggle:        '9c4fbd162ca82115ab551b4be9cde2a6',
 	}
-	| assignTo: svgGroups
+	| assignTo: gistMap
 }}
 
-{{ (ARGV.Length > 0 ? ARGV : svgGroups.Keys)
-   | assignTo: keys }}
+(ARGV.Length > 0 ? ARGV : gistMap.Keys) | assignTo: keys 
 
-{{#each group in keys}}
-{{svgGroups[group] | assignTo: gistId}}
-{{#if gistId}}
-	Updating SVG {{group}} '{{gistId}}':
+#each id in keys
+	gistMap[id] | assignTo: gistId
+	#if gistId
+		`Updating SVG id ${gistId}':`
 
-	{{ {} | assignTo: textFiles }}
+		{} | assignTo: textFiles 
 
-	{{ vfsFileSystem(`svg/${group}`) | assignTo: fs }}
-	{{#each file in fs.findFiles(`*.svg`) }}
-			{{ textFiles.putItem(`${group}\\${file.Name}`, file.textContents()) | end }}
-	{{/each}}
+		vfsFileSystem(`svg/${id}`) | assignTo: fs 
+		#each file in fs.findFiles(`*.svg`) 
+			textFiles.putItem(`${id}\\${file.Name}`, file.textContents()) | end 
+		/each
 
-	Writing to {{textFiles | count}} .svg's to {{group}} '{{gistId}}' ...
-	{{ vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist }}
-	{{ gist.writeTextFiles(textFiles) }}
-{{else}}
-Unknown group: {{group}}
-{{/if}}
-{{/each}}
+		`Writing to ${textFiles.count()} .svg's to id ${gistId} ...` | raw
+		vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist 
+		gist.writeTextFiles(textFiles)
+	else
+		`Unknown id: ${id}`
+	/if
+/each
+```
