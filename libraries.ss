@@ -7,23 +7,23 @@
         'react-lite-lib': 'ad42adc11337c243ee203f9e9f84622c',
         'vue-lite-lib':   '717258cd4c26ba612e5eed0615d8d61c',
     }
-    | assignTo: gistMap
+    | to => gistMap
 }}
 
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | assignTo: keys
+(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
 
 #each id in keys
-    gistMap[id] | assignTo: gistId
+    gistMap[id] | to => gistId
 
-    {} | assignTo: textFiles
+    {} | to => textFiles
 
-    vfsFileSystem(`libraries/${id}`) | assignTo: fs
+    vfsFileSystem(`libraries/${id}`) | to => fs
     #each file in fs.allFiles()
         textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end
     /each
 
     `Writing to ${textFiles.count()} files to ${id} '${gistId}' ...` | raw
-    vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist
+    vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist
     gist.writeTextFiles(textFiles)
 /each
 ```

@@ -6,23 +6,23 @@
     {
         'mq': '355338cd60a32ee9c9fc4761269f7782',
     }
-    | assignTo: gistMap
+    | to => gistMap
 }}
 
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | assignTo: keys
+(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
 
 #each id in keys
-    gistMap[id] | assignTo: gistId
+    gistMap[id] | to => gistId
 
-    {} | assignTo: textFiles
+    {} | to => textFiles
 
-    vfsFileSystem(`features/${id}`) | assignTo: fs
+    vfsFileSystem(`features/${id}`) | to => fs
     #each file in fs.allFiles()
         textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end
     /each
 
     `Writing to ${textFiles.count()} files to ${id} ${gistId} ...`
-    vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist
+    vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist
     gist.writeTextFiles(textFiles)
 /each
 ```

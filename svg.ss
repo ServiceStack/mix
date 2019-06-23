@@ -20,25 +20,25 @@
 		social:        '4c7ff759a722a5b0b9a960c52091d8cb',
 		toggle:        '9c4fbd162ca82115ab551b4be9cde2a6',
 	}
-	| assignTo: gistMap
+	| to => gistMap
 }}
 
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | assignTo: keys 
+(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys 
 
 #each id in keys
-	gistMap[id] | assignTo: gistId
+	gistMap[id] | to => gistId
 	#if gistId
 		`Updating SVG id ${gistId}':`
 
-		{} | assignTo: textFiles 
+		{} | to => textFiles 
 
-		vfsFileSystem(`svg/${id}`) | assignTo: fs 
+		vfsFileSystem(`svg/${id}`) | to => fs 
 		#each file in fs.findFiles(`*.svg`) 
 			textFiles.putItem(`${id}\\${file.Name}`, file.textContents()) | end 
 		/each
 
 		`Writing to ${textFiles.count()} .svg's to id ${gistId} ...` | raw
-		vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist 
+		vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist 
 		gist.writeTextFiles(textFiles)
 	else
 		`Unknown id: ${id}`

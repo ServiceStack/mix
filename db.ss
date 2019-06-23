@@ -16,26 +16,26 @@
         'ravendb':   '8ef41d53c8f54d85a50f26e2aad6da73',
         'marten':    'efcf39f4ce37a4822571a3a3433f5b4a',
     }
-    | assignTo: gistMap
+    | to => gistMap
 }}
 
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | assignTo: keys 
+(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys 
 
 #each id in keys
-    gistMap[id] | assignTo: gistId
+    gistMap[id] | to => gistId
     #if gistId
         `Updating DB id ${gistId}:`
 
-        {} | assignTo: textFiles 
+        {} | to => textFiles 
 
-        vfsFileSystem(`db/${id}`) | assignTo: fs 
+        vfsFileSystem(`db/${id}`) | to => fs 
         #each file in fs.allFiles() 
             textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end 
         /each
 
         `Writing to ${textFiles.count()} files to id ${gistId} ...`
 
-        vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist 
+        vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist 
         gist.writeTextFiles(textFiles)
     else
         `ERROR Unknown id: ${id}`

@@ -10,24 +10,24 @@
         'servicebus':   '0bbcb8db96236f4f90aafe4cd3812244',
         'redismq':      '27e9d7ba79a318abb1e018396be2c123',
     }
-    | assignTo: gistMap
+    | to => gistMap
 }}
 
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | assignTo: keys
+(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
 
 #each id in keys
-    gistMap[id] | assignTo: gistId
+    gistMap[id] | to => gistId
     #if gistId
-        {} | assignTo: textFiles
+        {} | to => textFiles
 
-        vfsFileSystem(`mq/${id}`) | assignTo: fs
+        vfsFileSystem(`mq/${id}`) | to => fs
         #each file in fs.allFiles()
             textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end
         /each
 
         `Writing to ${textFiles.count()} files to ${id} ${gistId} ...`
 
-        vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | assignTo: gist
+        vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist
         gist.writeTextFiles(textFiles)
     else
         `ERROR Unknown id: ${id}`
