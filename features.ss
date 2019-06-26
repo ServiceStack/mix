@@ -9,6 +9,8 @@
     | to => gistMap
 }}
 
+['Configure.Mq.cs'] | to => optional
+
 (ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
 
 #each id in keys
@@ -18,7 +20,9 @@
 
     vfsFileSystem(`features/${id}`) | to => fs
     #each file in fs.allFiles()
-        textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end
+        file.VirtualPath.replace('/','\\') | to => key
+        (optional.contains(key) ? `${key}?` : key) | to => key
+        textFiles.putItem(key, file.textContents()) | end
     /each
 
     `Writing to ${textFiles.count()} files to ${id} ${gistId} ...`
