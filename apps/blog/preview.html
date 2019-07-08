@@ -1,0 +1,7 @@
+API /preview
+  * content : string - #Script to evaluate
+
+{{ 'content' | importRequestParams }}
+
+{{ content  | evalScript({use:{plugins:'MarkdownScriptPlugin'}}) | assignTo:response }}
+{{ response | return({ contentType:'text/plain' }) }}
