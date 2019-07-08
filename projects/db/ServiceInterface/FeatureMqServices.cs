@@ -1,11 +1,11 @@
 using System;
 using ServiceStack;
 using ServiceStack.Messaging;
-using MyApp.ServiceModel;
+using db.ServiceModel;
 
-namespace MyApp.ServiceInterface
+namespace db.ServiceInterface
 {
-    public class MqServices : Service
+    public class FeatureMqServices : Service
     {
         public IMessageService MqService { get; set; }
 

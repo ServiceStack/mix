@@ -1,9 +1,9 @@
 using ServiceStack;
 using ServiceStack.Script;
 using ServiceStack.Messaging;
-using MyApp.ServiceModel;
+using db.ServiceModel;
 
-namespace MyApp
+namespace db
 {
     public class FeatureMq : IConfigureAppHost, IPostInitPlugin
     {

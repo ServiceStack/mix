@@ -8,9 +8,7 @@
     }
     | to => gistMap
 }}
-
 ['Configure.Mq.cs'] | to => optional
-
 (ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
 
 #each id in keys

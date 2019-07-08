@@ -5,7 +5,7 @@ using MyApp.ServiceModel;
 
 namespace MyApp.ServiceInterface
 {
-    public class MqServices : Service
+    public class FeatureMqServices : Service
     {
         public IMessageService MqService { get; set; }
 

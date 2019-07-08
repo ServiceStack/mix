@@ -2,10 +2,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceStack;
 using ServiceStack.Messaging;
-using ServiceStack.Redis;
-using ServiceStack.Messaging.Redis;
 
-namespace MyApp
+namespace db
 {
     /**
       Register Services you want available via MQ in your AppHost, e.g:
@@ -14,18 +12,14 @@ namespace MyApp
     */
     public class ConfigureMq : IConfigureServices, IAfterInitAppHost
     {
-        IConfiguration Configuration { get; }
-        public ConfigureMq(IConfiguration configuration) => Configuration = configuration;
-
         public void Configure(IServiceCollection services)
         {
-            services.AddSingleton<IMessageService>(c =>
-                new RedisMqServer(c.Resolve<IRedisClientsManager>()));
+            services.AddSingleton<IMessageService>(c => new BackgroundMqService());
         }
 
         public void AfterInit(IAppHost appHost)
         {
             appHost.Resolve<IMessageService>().Start();
         }
-    }    
+    }
 }

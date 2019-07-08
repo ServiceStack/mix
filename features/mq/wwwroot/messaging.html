@@ -1,19 +1,33 @@
 <!--
-title: MQ Examples
+title: Test MQ Page
 -->
 
 <div class="row justify-content-between pt-3">
     <div class="col">
-        <p>Test MQ</p>
-        <button data-click="incr:-1">-</button>
-        <button data-click="incr:1">+</button>
-        <input type="text" id="txtName" value="Test" placeholder="Name" data-input="incr:0">
-        <div class="pt-1">
-            <input id="chkOneWay" type="checkbox" checked>
-            <label for="chkOneWay">Publish to One Way endpoint</label>
+        <h4 class="pb-3">Test MQ</h4>
+        <div class="row">
+            <div class="col col-2">
+                <div class="btn-group ml-3">
+                    <button class="btn btn-outline-primary" data-click="incr:-1">-</button>
+                    <button class="btn btn-outline-primary" data-click="incr:1">+</button>
+                </div>
+            </div>
+            <div class="col col-auto">
+                <input class="form-control ml-1" type="text" id="txtName" value="Test" placeholder="Name" data-input="incr:0">
+            </div>
+        </div>
+        <div class="py-3 ml-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="mq-publish" id="radOneWay" value="OneWay" checked>
+                <label class="form-check-label" for="radOneWay">OneWay Endpoint</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="mq-publish" id="radPublishMq" value="PublishMq">
+                <label class="form-check-label" for="radPublishMq">PublishMq Service</label>
+            </div>
         </div>
         <div class="py-2">
-            <button data-click="refresh">refresh</button>
+            <button class="btn btn-secondary" data-click="refresh">Refresh State</button>
         </div>
         <dl>
             <dt>Name:</dt>
@@ -23,12 +37,34 @@ title: MQ Examples
         </dl>
     </div>
     <div class="col">
-        <pre id="mqstats">{{ mqService.mqStatsDescription() }}</pre>        
+        <pre id="mqstats">{{ mqService.mqStatsDescription() }}</pre>
     </div>
 </div>
 
 {{#raw appendTo scripts}}
 <script>
+    // Can remove generated DTO's from FeatureMqServices once included in App's dtos.js
+    if (typeof TestMq == 'undefined') {
+        TestMq = /** @class */ (function () {
+            function TestMq(init) {
+                Object.assign(this, init);
+            }
+            TestMq.prototype.createResponse = function () { return new TestMqResponse(); };
+            TestMq.prototype.getTypeName = function () { return 'TestMq'; };
+            return TestMq;
+        }());
+    }
+    if (typeof PublishMq == 'undefined') {
+        PublishMq = /** @class */ (function () {
+            function PublishMq(init) {
+                Object.assign(this, init);
+            }
+            PublishMq.prototype.createResponse = function () { };
+            PublishMq.prototype.getTypeName = function () { return 'PublishMq'; };
+            return PublishMq;
+        }());
+    }
+
     var timeout,
         $name = document.getElementById("name"),
         $counter = document.getElementById("counter"),
@@ -38,7 +74,7 @@ title: MQ Examples
 
     function refresh() {
         client.get(new TestMq())
-            .then(function(r) {
+            .then(function (r) {
                 $name.innerHTML = r.name;
                 $counter.innerHTML = r.counter;
                 $mqstats.innerHTML = r.statsDescription;
@@ -46,18 +82,19 @@ title: MQ Examples
         timeout = null;
     }
 
-    function refreshTimeout() { 
+    function refreshTimeout() {
         if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(refresh, 500);
+        timeout = setTimeout(refresh, 250);
     }
 
     bindHandlers({
         incr(add) {
-            if ($chkOneWay.checked) {
-                client.publish(new TestMq({ name:$txtName.value, add:parseInt(add,10) }))
+            var oneway = document.querySelector('input[name=mq-publish]:checked').value === "OneWay";
+            if (oneway) {
+                client.publish(new TestMq({ name: $txtName.value, add: parseInt(add, 10) }))
                     .then(refreshTimeout);
             } else {
-                client.post(new PublishMq({ name:$txtName.value, add:parseInt(add,10) }))
+                client.post(new PublishMq({ name: $txtName.value, add: parseInt(add, 10) }))
                     .then(refreshTimeout);
             }
         },

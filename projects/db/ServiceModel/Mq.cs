@@ -1,7 +1,7 @@
 using System;
 using ServiceStack;
 
-namespace MyApp.ServiceModel
+namespace db.ServiceModel
 {
     [Route("/mq/publish")]
     public class PublishMq : IReturnVoid
