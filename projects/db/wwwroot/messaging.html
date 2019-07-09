@@ -43,6 +43,11 @@ title: Test MQ Page
 
 {{#raw appendTo scripts}}
 <script>
+    if (typeof JsonServiceClient == 'undefined') { // import @servicestack/client if needed
+        var exports = exports || {}, require = require || function(){};
+        document.write('<script src="//unpkg.com/@servicestack/client/dist/index.js"><\/script>');
+    }
+
     // Can remove generated DTO's from FeatureMqServices once included in App's dtos.js
     if (typeof TestMq == 'undefined') {
         TestMq = /** @class */ (function () {
@@ -88,7 +93,7 @@ title: Test MQ Page
     }
 
     bindHandlers({
-        incr(add) {
+        incr: function(add) {
             var oneway = document.querySelector('input[name=mq-publish]:checked').value === "OneWay";
             if (oneway) {
                 client.publish(new TestMq({ name: $txtName.value, add: parseInt(add, 10) }))

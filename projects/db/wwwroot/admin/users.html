@@ -1,0 +1,148 @@
+<!--
+title: Admin Users
+-->
+
+{{ 25 | to => pageSize}}
+{{
+    ['Id', 'UserName', 'Email', 'DisplayName', 'CreatedDate', 'ModifiedDate'] 
+    | to => displayColumns
+}}
+
+{{ qs.page ?? 0 | to => page}}
+
+<style>
+#tblUsers tr:hover td {
+    background: #ffc;
+    cursor: pointer;
+}
+.modal th {
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+.modal td>span {
+    text-overflow: ellipsis;
+    width: 560px !important;
+    display: block;
+    overflow: hidden;
+}
+.modal td img {
+    max-height: 200px;
+    max-width: 200px;    
+}
+</style>
+
+<div class="modal fade" id="modalUser" tabindex="-1" role="dialog"aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+    
+    
+<h2 class="mb-3">Admin Users</h2>
+
+{{ authRepo.searchUserAuths({ query:qs.q, take: pageSize, skip: pageSize*page }) | to => users }}
+
+<div class="row mb-2">
+    <div class="col"></div>
+    <div class="col col-auto">
+        <form action="" class="form-inline">
+            {{ {page} | htmlHiddenInputs }}
+            <div>
+                <span class="mr-2">Showing Results {{page * pageSize + 1}} to {{page * pageSize + pageSize}}</span>
+                <input type="text" name="q" class="form-control" placeholder="search" data-input="page:0" value="{{qs.q}}" data-keypress="submitOnEnter">
+                <button class="btn btn-outline-primary" data-click="page:-1" {{ {disabled:page == 0} | htmlAttrs }}>prev</button>
+                <button class="btn btn-outline-primary" data-click="page:1"  {{ {disabled:users.Count < pageSize} | htmlAttrs }}>next</button>
+            </div>
+        </form>
+    </div>
+</div>
+<table id="tblUsers" class="table table-striped table-sm">
+    <thead>
+        <tr>
+            {{#each column in displayColumns}}
+            <th>{{column | splitCase}}</th>
+            {{/each}}
+        </tr>
+    </thead>
+    {{#each user in users}}
+    <tr data-click="showUser:{{user.Id}}">
+        {{#each column in displayColumns}}
+        <td>{{user[column]}}</td>
+        {{/each}}
+    </tr>
+    {{/each}}
+</table>
+
+{{#script}}
+pageSize = {{pageSize}};
+USERS = {{users | json}};
+{{/script}}
+
+{{#raw appendTo scripts}}
+<script>
+    if (typeof JsonServiceClient == 'undefined') { // import @servicestack/client if needed
+        var exports = exports || {}, require = require || function(){};
+        document.write('<script src="//unpkg.com/@servicestack/client/dist/index.js"><\/script>');
+    }
+    window.jQuery || document.write('<script src="//code.jquery.com/jquery-3.3.1.slim.min.js"><\/script>');
+    $().modal     || document.write('<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"><\/script>');
+
+    var IMG_REG_REQ = ['^https?:','^//','^data:image'].map(function(x){ return new RegExp(x) });
+    var IMG_REG_OPT = ['img','avatar','.jpg$','.jpeg$','.png$','.gif$'].map(function(x){ return new RegExp(x) });
+    function renderAsImg(key, val) {
+        function regexMatch(regex){ return val.match(regex); }
+        return typeof val == 'string' && 
+            IMG_REG_REQ.some(regexMatch) && (key.toLowerCase().indexOf('profileurl') || IMG_REG_OPT.some(regexMatch));
+    }
+
+    var $page = document.querySelector('input[name=page]');
+    bindHandlers({
+        page: function(next) {
+            $page.value = Math.max(parseInt($page.value) + parseInt(next), 0);
+        },
+        submitOnEnter: function(e) {
+            if (e.keyCode == 13) this.closest('form').submit();
+            $page.value = "0";
+        },
+        showUser: function(id) {
+            var user = USERS.filter(function(user) { return user.id == id })[0];
+
+            var sb = ['<table class="table">'];
+            for (var k in user) {
+                var val = user[k];
+                if (typeof val == 'string') {
+                    if (val.startsWith('/Date(')) 
+                        val = toDateFmt(val);
+                }
+
+                if (renderAsImg(k,val)) {
+                    sb.push('<tr><td colspan="2"><img src="' + val + '"></td></tr>');                    
+                } else if ($.isArray(val)) {
+                    val = val.join(', ');
+                }
+                else {
+                    sb.push('<tr><th>' + humanize(k) + '</th><td><span>' + val + '</span></td></tr>');
+                }
+            }
+            sb.push('</table>');
+            
+            $("#modalUser .modal-title").html(user.displayName || user.userName || user.email);
+            $("#modalUser .modal-body").html(sb.join(''));
+            $('#modalUser').modal('show');
+        }
+    });
+
+</script>
+{{/raw}}
