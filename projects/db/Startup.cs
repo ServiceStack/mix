@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Funq;
 using ServiceStack;
+using ServiceStack.Logging;
 using ServiceStack.Messaging;
 using ServiceStack.Web;
 using MyApp.ServiceInterface;
@@ -54,6 +55,7 @@ namespace MyApp
         // Configure your AppHost with the necessary configuration and dependencies your App needs
         public override void Configure(Container container)
         {
+            //LogManager.LogFactory = new ConsoleLogFactory();
             Plugins.Add(new SharpPagesFeature()); // enable server-side rendering, see: https://sharpscript.net/docs/sharp-pages
 
             SetConfig(new HostConfig

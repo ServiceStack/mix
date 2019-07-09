@@ -15,7 +15,7 @@ namespace db
             ViewUtils.NavItems.Add(new NavItem {
                 Label = "Users",
                 Href = "/admin/users",
-                // Show = "role:Admin" // Uncomment to restrict menu item to Admin Users
+                //Show = "role:Admin" // Uncomment to restrict menu item to Admin Users
             });
         }
     }
