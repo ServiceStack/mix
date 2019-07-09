@@ -128,13 +128,15 @@ USERS = {{users | json}};
                 }
 
                 if (renderAsImg(k,val)) {
-                    sb.push('<tr><td colspan="2"><img src="' + val + '"></td></tr>');                    
-                } else if ($.isArray(val)) {
+                    sb.push('<tr><td colspan="2"><img src="' + val + '"></td></tr>');
+                    continue;
+                } 
+                if ($.isArray(val)) {
                     val = val.join(', ');
+                } else if (typeof val == 'object') {
+                    val = JSON.stringify(val).replace('"','');
                 }
-                else {
-                    sb.push('<tr><th>' + humanize(k) + '</th><td><span>' + val + '</span></td></tr>');
-                }
+                sb.push('<tr><th>' + humanize(k) + '</th><td><span>' + val + '</span></td></tr>');
             }
             sb.push('</table>');
             
