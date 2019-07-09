@@ -5,6 +5,7 @@ using ServiceStack;
 using ServiceStack.Web;
 using ServiceStack.Data;
 using ServiceStack.Auth;
+using ServiceStack.Text;
 using ServiceStack.Configuration;
 using ServiceStack.OrmLite;
 
@@ -16,6 +17,19 @@ namespace MyApp
         public string ProfileUrl { get; set; }
         public string LastLoginIp { get; set; }
         public DateTime? LastLoginDate { get; set; }
+    }
+
+    public class CustomUserAuth : UserAuth
+    {
+        public string DefaultProfileUrl { get; set; }
+        public string IpAddress { get; set; }
+        public string RefSource { get; set; }
+        public string RefUrn { get; set; }
+        public DateTime? Banned { get; set; }
+        public string BannedBy { get; set; }
+        public string Notes { get; set; }
+        public DateTime? DisableEmails { get; set; }
+        public string CreatedBy { get; set; }
     }
 
     public class AppUserAuthEvents : AuthEvents
@@ -51,6 +65,39 @@ namespace MyApp
             authRepo.InitSchema();
 
             CreateUser(authRepo, "admin@email.com", "Admin User", "p@55wOrd", roles:new[]{ RoleNames.Admin });
+
+            //ImportTechStackUsers((OrmLiteConnectionFactory) appHost.Resolve<IDbConnectionFactory>(), authRepo);
+        }
+
+        public void ImportTechStackUsers(OrmLiteConnectionFactory dbFactory, IAuthRepository authRepo)
+        {
+            dbFactory.RegisterConnection("techstacks", 
+                Environment.GetEnvironmentVariable("TECHSTACKS_DB"),
+                PostgreSqlDialect.Provider);
+
+            using (var db = dbFactory.Open())
+            using (var dbTechStacks = dbFactory.Open("techstacks"))
+            {
+                var existingEmails = db.ColumnDistinct<string>(db.From<AppUser>().Select(x => x.Email));
+
+                var techstackUsers = dbTechStacks.Select(dbTechStacks.From<CustomUserAuth>());
+
+                foreach (var user in techstackUsers)
+                {
+                    try
+                    {
+                        if (existingEmails.Contains(user.Email))
+                            continue;
+                        var appUser = user.ConvertTo<AppUser>();
+                        appUser.ProfileUrl = user.DefaultProfileUrl;
+                        authRepo.CreateUserAuth(appUser, "test");
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.Message.Print();
+                    }
+                }
+            }
         }
 
         public void BeforePluginsLoaded(IAppHost appHost)
