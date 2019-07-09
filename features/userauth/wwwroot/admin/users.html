@@ -2,6 +2,10 @@
 title: Admin Users
 -->
 
+{{* Uncomment below to restrict access to Admin Users *}}    
+{{* redirectIfNotAuthenticated *}}
+{{* assertRole('Admin') *}}
+
 {{ 25 | to => pageSize}}
 {{
     ['Id', 'UserName', 'Email', 'DisplayName', 'CreatedDate', 'ModifiedDate'] 
@@ -21,7 +25,7 @@ title: Admin Users
 }
 .modal td>span {
     text-overflow: ellipsis;
-    width: 560px !important;
+    width: 550px !important;
     display: block;
     overflow: hidden;
 }
@@ -60,7 +64,7 @@ title: Admin Users
         <form action="" class="form-inline">
             {{ {page} | htmlHiddenInputs }}
             <div>
-                <span class="mr-2">Showing Results {{page * pageSize + 1}} to {{page * pageSize + pageSize}}</span>
+                <span class="mr-2">Showing Results {{page * pageSize + 1}} to {{page * pageSize + users.Count}}</span>
                 <input type="text" name="q" class="form-control" placeholder="search" data-input="page:0" value="{{qs.q}}" data-keypress="submitOnEnter">
                 <button class="btn btn-outline-primary" data-click="page:-1" {{ {disabled:page == 0} | htmlAttrs }}>prev</button>
                 <button class="btn btn-outline-primary" data-click="page:1"  {{ {disabled:users.Count < pageSize} | htmlAttrs }}>next</button>
@@ -132,6 +136,7 @@ USERS = {{users | json}};
                     continue;
                 } 
                 if ($.isArray(val)) {
+                    if (val.length == 0) continue;
                     val = val.join(', ');
                 } else if (typeof val == 'object') {
                     val = JSON.stringify(val).replace('"','');
