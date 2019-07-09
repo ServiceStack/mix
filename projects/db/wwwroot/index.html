@@ -33,7 +33,7 @@ title: Sharp Pages
   <div class="col">
       <h3>My Tables</h3>
 
-      {{ authRepo.getUserAuths() | htmlDump }}
+      {{ authRepo.getUserAuths({ take:10 }) | htmlDump }}
 
       {{ `SELECT * FROM MyTable` | dbSelect | htmlDump({ caption: 'MyTable' }) }}
       

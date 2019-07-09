@@ -1,7 +1,7 @@
 using ServiceStack;
 using ServiceStack.Script;
 
-namespace MyApp
+namespace db
 {
     public class FeatureUserAuth : IConfigureAppHost, IPostInitPlugin
     {
