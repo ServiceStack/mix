@@ -16,7 +16,7 @@ namespace MyApp
 
         public void AfterPluginsLoaded(IAppHost appHost)
         {
-            ViewUtils.NavItems.Add(new NavItem {
+            View.NavItems.Add(new NavItem {
                 Label = "Messaging",
                 Href = "/messaging",
             });

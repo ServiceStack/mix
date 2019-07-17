@@ -12,7 +12,7 @@ namespace MyApp
 
         public void AfterPluginsLoaded(IAppHost appHost)
         {
-            ViewUtils.NavItems.Add(new NavItem {
+            View.NavItems.Add(new NavItem {
                 Label = "Users",
                 Href = "/admin/users",
                 // Show = "role:Admin" // Uncomment to only show menu item to Admin Users
