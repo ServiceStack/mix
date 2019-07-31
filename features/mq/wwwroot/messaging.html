@@ -43,7 +43,7 @@ title: Test MQ Page
 
 {{#raw appendTo scripts}}
 <script>
-    // Can remove generated DTO's from FeatureMqServices once included in App's dtos.js
+    // Can remove generated DTO's from MqServices once included in App's dtos.js
     if (typeof TestMq == 'undefined') {
         TestMq = /** @class */ (function () {
             function TestMq(init) {
@@ -64,6 +64,9 @@ title: Test MQ Page
             return PublishMq;
         }());
     }
+
+    if (typeof client == 'undefined')
+        client = new JsonServiceClient('/');
 
     var timeout,
         $name = document.getElementById("name"),
