@@ -15,15 +15,15 @@
 #each id in keys
     gistMap[id] | to => gistId
 
-    {} | to => textFiles
+    {} | to => files
 
     vfsFileSystem(`libraries/${id}`) | to => fs
     #each file in fs.allFiles()
-        textFiles.putItem(file.VirtualPath.replace('/','\\'), file.textContents()) | end
+        files.putItem(file.VirtualPath.replace('/','\\'), file.fileContents()) | end
     /each
 
-    `Writing to ${textFiles.count()} files to ${id} '${gistId}' ...` | raw
+    `Writing to ${files.count()} files to ${id} '${gistId}' ...` | raw
     vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist
-    gist.writeTextFiles(textFiles)
+    gist.writeFiles(files)
 /each
 ```
