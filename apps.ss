@@ -14,7 +14,7 @@
 }}
 
 [] | to => optional
-['blog.sqlite'] | to => ignore
+['blog.sqlite','.gitignore'] | to => ignore
 
 (ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
 
