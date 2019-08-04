@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>{{ title }}</title>
+{{#if debug}}<script>{{ '/js/hot-loader.js' | includeFile }}</script>{{/if}}
+
+<link rel="stylesheet" href="../assets/css/bootstrap.css">
+<link rel="stylesheet" href="../assets/css/default.css">
+</head>
+<body>
+    <h2 id="title"><img src="/assets/img/logo-64.png"> {{ title }}</h2>
+
+    <div id="content">{{ page }}</div>
+
+    <script src="../assets/js/jquery-3.2.1.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/default.js"></script>
+
+    {{ scripts | raw }} 
+
+    <div id="sig">made with <span>&#10084;</span> by <a target="_blank" href="https://servicestack.net" title="ServiceStack">ServiceStack</a></div>
+</body>
+</html>
