@@ -32,10 +32,10 @@
         {{ Created | toDateTime | dateFormat('dddd, dd MMMM') }}
     </div>
     
-    {{ { 'data-edit-path': `/posts/${Slug}/edit`} | if(isAuthenticated and userName = CreatedBy) | assignTo: attrs }}
+    {{ { 'data-edit-path': `/posts/${Slug}/edit`} | if(isAuthenticated and userName = CreatedBy) | to => attrs }}
 
     <div class="post-content" {{ attrs | htmlAttrs }}>
-        {{ Content | evalScript({use:{plugins:'MarkdownScriptPlugin'}}) | raw }}
+        {{ Content | evalScript({use:{context:true}}) | raw }}
     </div>
 
 {{#if hidePostInfo}}
