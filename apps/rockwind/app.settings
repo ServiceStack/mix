@@ -2,3 +2,5 @@ debug true
 name Rockwind SQLite Web App
 db sqlite
 db.connection northwind.sqlite
+
+CefConfig { width:1150, height:1050 }
