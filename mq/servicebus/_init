@@ -1,1 +1,1 @@
-dotnet add ServiceStack.Azure
+dotnet add package ServiceStack.Azure

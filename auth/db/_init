@@ -1,1 +1,1 @@
-dotnet add ServiceStack.Server
+dotnet add package ServiceStack.Server
