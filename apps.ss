@@ -24,6 +24,10 @@
     {} | to => files
 
     vfsFileSystem(`apps/${id}`) | to => fs
+
+    fs.deleteDirectory('GPUCache') | end
+    fs.deleteFile('cef.log') | end
+
     #each file in fs.allFiles()
         file.VirtualPath.replace('/','\\') | to => key
         (optional.contains(key) ? `${key}?` : key) | to => key
