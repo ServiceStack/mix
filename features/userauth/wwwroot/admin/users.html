@@ -6,13 +6,14 @@ title: Admin Users
 {{* redirectIfNotAuthenticated *}}
 {{* assertRole('Admin') *}}
 
-{{ 25 | to => pageSize}}
+{{ 25 |> to => pageSize}}
 {{
     ['Id', 'UserName', 'Email', 'DisplayName', 'CreatedDate', 'ModifiedDate'] 
-    | to => displayColumns
+    |> to => displayColumns
 }}
 
-{{ qs.page ?? 0 | to => page}}
+{{ qs.page ?? 0 |> to => pageNo }}
+
 
 <style>
 #tblUsers tr:hover td {
@@ -56,18 +57,18 @@ title: Admin Users
     
 <h2 class="mb-3">Admin Users</h2>
 
-{{ authRepo.searchUserAuths({ query:qs.q, take: pageSize, skip: pageSize*page }) | to => users }}
+{{ authRepo.searchUserAuths({ query:qs.q ?? '', take: pageSize, skip: pageSize*pageNo }) |> to => users }}
 
 <div class="row mb-2">
     <div class="col"></div>
     <div class="col col-auto">
         <form action="" class="form-inline">
-            {{ {page} | htmlHiddenInputs }}
+            {{ {page:pageNo} |> htmlHiddenInputs }}
             <div>
-                <span class="mr-2">Showing Results {{page * pageSize + 1}} to {{page * pageSize + users.Count}}</span>
+                <span class="mr-2">Showing Results {{pageNo * pageSize + 1}} to {{pageNo * pageSize + users.count()}}</span>
                 <input type="text" name="q" class="form-control" placeholder="search" data-input="page:0" value="{{qs.q}}" data-keypress="submitOnEnter">
-                <button class="btn btn-outline-primary" data-click="page:-1" {{ {disabled:page == 0} | htmlAttrs }}>prev</button>
-                <button class="btn btn-outline-primary" data-click="page:1"  {{ {disabled:users.Count < pageSize} | htmlAttrs }}>next</button>
+                <button class="btn btn-outline-primary" data-click="page:-1" {{ {disabled:pageNo == 0} |> htmlAttrs }}>prev</button>
+                <button class="btn btn-outline-primary" data-click="page:1"  {{ {disabled:users.count() < pageSize} |> htmlAttrs }}>next</button>
             </div>
         </form>
     </div>
@@ -76,7 +77,7 @@ title: Admin Users
     <thead>
         <tr>
             {{#each column in displayColumns}}
-            <th>{{column | splitCase}}</th>
+            <th>{{column |> splitCase}}</th>
             {{/each}}
         </tr>
     </thead>
@@ -91,7 +92,7 @@ title: Admin Users
 
 {{#script}}
 pageSize = {{pageSize}};
-USERS = {{users | json}};
+USERS = {{users |> json}};
 {{/script}}
 
 {{#raw appendTo scripts}}
