@@ -15,7 +15,7 @@ namespace MyApp
         {
             var mongoClient = new MongoClient();
             IMongoDatabase mongoDatabase = mongoClient.GetDatabase("MyApp");
-            container.AddSingleton(mongoDatabase);
+            services.AddSingleton(mongoDatabase);
         }
     }    
 }
