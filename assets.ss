@@ -1,6 +1,6 @@
 ```code
-* Update /assets gists           *
-* Usage: web run assets.ss <id>? *
+* Update /assets gists         *
+* Usage: x run assets.ss <id>? *
 
 {{
     {

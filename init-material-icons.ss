@@ -1,8 +1,8 @@
 ```code
 * Rename material design icon's 'ic_id_48.svg' to 'id.svg' *
-* Usage: web run init.material-icons.css <id>              *
+* Usage: x run init.material-icons.css <id>              *
 
-ARGV.Length == 0 ? throw("USAGE: web run init-material-icons.ss <svgdir>") : null
+ARGV.Length == 0 ? throw("USAGE: x run init-material-icons.ss <svgdir>") : null
 
 ARGV[0] | to => id
 vfsFileSystem(`svg/${id}`) | to => fs

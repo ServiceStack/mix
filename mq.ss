@@ -1,6 +1,6 @@
 ```code
-* Update /mq gists           *
-* Usage: web run mq.ss <id>? *
+* Update /mq gists         *
+* Usage: x run mq.ss <id>? *
 
 {{
     {

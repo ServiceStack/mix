@@ -1,6 +1,6 @@
 ```code
-* Update /auth gists           *
-* Usage: web run auth.ss <id>? *
+* Update /auth gists         *
+* Usage: x run auth.ss <id>? *
 
 {{
     {

@@ -1,6 +1,6 @@
 ```code
-* Update /features gists           *
-* Usage: web run features.ss <id>? *
+* Update /features gists         *
+* Usage: x run features.ss <id>? *
 
 {{
     {

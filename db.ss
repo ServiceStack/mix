@@ -1,6 +1,6 @@
 ```code
-* Update /db gists           *
-* Usage: web run db.ss <id>? *
+* Update /db gists         *
+* Usage: x run db.ss <id>? *
 
 {{
     {

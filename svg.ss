@@ -1,6 +1,6 @@
 ```code
-* Update /svg mix gists       *
-* Usage: web run svg.ss <id>? *
+* Update /svg mix gists     *
+* Usage: x run svg.ss <id>? *
 
 {{
 	{ 

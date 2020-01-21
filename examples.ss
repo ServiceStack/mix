@@ -1,6 +1,6 @@
 ```code
-* Update /examples gists           *
-* Usage: web run examples.ss <id>? *
+* Update /examples gists         *
+* Usage: x run examples.ss <id>? *
 
 {{
     {

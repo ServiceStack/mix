@@ -1,6 +1,6 @@
 ```code
-* Update /libraries gists           *
-* Usage: web run libraries.ss <id>? *
+* Update /libraries gists         *
+* Usage: x run libraries.ss <id>? *
 
 {{
     {

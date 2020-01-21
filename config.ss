@@ -1,6 +1,6 @@
 ```code
-* Update /config gists           *
-* Usage: web run config.ss <id>? *
+* Update /config gists         *
+* Usage: x run config.ss <id>? *
 
 {{
     {

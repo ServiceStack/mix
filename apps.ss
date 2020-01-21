@@ -1,6 +1,6 @@
 ```code
-* Update /apps gists           *
-* Usage: web run apps.ss <id>? *
+* Update /apps gists         *
+* Usage: x run apps.ss <id>? *
 
 {{
     {
