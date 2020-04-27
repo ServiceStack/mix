@@ -27,7 +27,7 @@
 
         `Writing to ${textFiles.count()} files to ${id} ${gistId} ...`
 
-        vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist
+        vfsGist(gistId, 'GISTLYN_TOKEN'.envVariable()) | to => gist
         gist.writeTextFiles(textFiles)
     else
         `ERROR Unknown id: ${id}`

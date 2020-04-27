@@ -23,7 +23,7 @@
     /each
 
     `Writing to ${files.count()} files to ${id} '${gistId}' ...` | raw
-    vfsGist(gistId, 'GITHUB_GIST_TOKEN'.envVariable()) | to => gist
+    vfsGist(gistId, 'GISTLYN_TOKEN'.envVariable()) | to => gist
     gist.writeFiles(files)
 /each
 ```
