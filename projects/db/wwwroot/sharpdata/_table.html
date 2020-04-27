@@ -1,0 +1,25 @@
+```code
+var format = table.indexOf('.') >= 0 ? table.rightPart('.') : null
+#if format
+    table = table.leftPart('.')
+/if
+`SELECT * FROM ${table}` |> to => sql
+var filters = []
+'format,orderby,limit,offset'.split(',') |> to => ignore
+#each qs.Keys where !ignore.contains(it.lower())
+    `${it} = @${it}` |> addTo => filters
+/each
+#if !isEmpty(filters)
+    `${sql} WHERE ${join(filters, ' AND ')}` |> to => sql
+/if
+#if qs.orderBy && !qs.orderBy.isUnsafeSqlFragment()
+    `${sql} ORDER BY ${qs.orderBy}` |> to => sql
+/if
+#if qs.limit
+    `${sql} LIMIT ${qs.limit.toInt()}` |> to => sql
+/if
+#if qs.offset
+    `${sql} OFFSET ${qs.offset.toInt()}` |> to => sql
+/if
+sql |> dbSelect(queryDictionary) |> return({ format })
+```

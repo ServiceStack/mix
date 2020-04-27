@@ -1,0 +1,15 @@
+
+<dl>
+{{#each dbTableNamesWithRowCounts}}
+    <dt>
+        <a class="btn btn-link" href="{{it.Key}}">{{it.Key}}</a> ({{it.Value}})
+    </dt>
+    <dd>
+<pre class="pl-4 text-muted">
+{{#each def in dbColumns(it.key)}}
+{{def}}
+{{/each}}
+</pre>
+    </dd>
+{{/each}}
+</dl>
