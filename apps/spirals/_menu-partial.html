@@ -1,5 +1,3 @@
-{{ it | withoutKeys('it') | toList | assignTo: links }}
-
 <style>
 .navbar {
     color: #FFF;
@@ -47,8 +45,8 @@
         <a class="title" href="/">{{ hostServiceName }}</a>
 
         <ul class="navbar-nav">
-            {{#each links}}
-            <li {{ {active: matchesPathInfo(Key)} | htmlClass }}>
+            {{#each it.ownProps()}}
+            <li {{ {active: matchesPathInfo(Key)} |> htmlClass }}>
                 <a class="nav-link" href="{{Key}}">{{Value}}</a>
             </li>
             {{/each}}

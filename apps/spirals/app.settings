@@ -1,4 +1,4 @@
-debug true
+debug false
 name Spirals
 CefConfig { width:1150, height:1050 }
 publish https://gist.github.com/gistlyn/4e06df1f1b9099526a7c97721aa7f69c

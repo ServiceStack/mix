@@ -39,9 +39,9 @@
     </style>
 </head>
 <body>
-    <i hidden>{{ '/js/hot-fileloader.js' | ifDebugIncludeScript }}</i>
+    <i hidden>{{ '/js/hot-fileloader.js' |> ifDebugIncludeScript }}</i>
 
-    {{ 'menu' | partial({ 
+    {{ 'menu' |> partial({ 
         '/':           'Home',
         '/multi':      'Multi',
         '/animated':   'Animated',
@@ -55,7 +55,7 @@
       {{ page }}
     </div>
 
-    {{ scripts | raw }}
+    {{ scripts |> raw }}
 
 </body>
 </html>
