@@ -49,7 +49,6 @@ namespace MyApp
         {
             SetConfig(new HostConfig
             {
-                DefaultRedirectPath = "/metadata",
                 UseSameSiteCookies = true,
                 DebugMode = HostingEnvironment.IsDevelopment()
             });
