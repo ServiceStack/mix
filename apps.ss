@@ -4,6 +4,7 @@
 
 {{
     {
+        autodto:  'c6567f32ba7de2eb760dc776f3067e78',
         redis:    '6de7993333b457445793f51f6f520ea8',
         spirals:  '4e06df1f1b9099526a7c97721aa7f69c',
         blog:     'ddc064f62cafc91ead200552d9d8ad89',
