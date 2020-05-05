@@ -3,7 +3,7 @@ layout: none
 -->
 
 ```code
-vfsFileSystem('.') |> to => fs
+var fs = vfsFileSystem('.')
 
 #if !fs.fileExists('northwind.sqlite') || fs.file('northwind.sqlite').Length == 0
     fs.writeFile('northwind.sqlite', file('northwind.readonly.sqlite'))
