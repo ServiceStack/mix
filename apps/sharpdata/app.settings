@@ -1,0 +1,7 @@
+debug true
+name Sharp Data
+
+# Configure below. Supported dialects: sqlite, mysql, postgres, sqlserver
+db DIALECT
+db.connection CONNECTION_STRING
+# db.connections[namedDb] { db:DIALECT, connection:namedDbConnection }
