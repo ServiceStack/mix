@@ -1,16 +1,15 @@
 ```code
-* Update /features gists         *
-* Usage: x run features.ss <id>? *
+* Update /files gists         *
+* Usage: x run files.ss <id>? *
 
 {{
     {
-        'mq':            '355338cd60a32ee9c9fc4761269f7782',
-        'userauth':      '9fe61f1967c53d85984402118ee03017',
-        'grpc':          '656c29a7257dc374d22d4aa709ba7244',
+        'bcl.proto':     '33232feeeb4f7d2043d27afb1d60259b',
+        'gen-https.sh':  '4b321ee5258d5c7d8c634610aabb5af1',
     }
     |> to => gistMap
 }}
-var optional = ['Configure.Mq.cs']
+var optional = []
 var keys = ARGV.Length > 0 ? ARGV : gistMap.Keys
 
 #each id in keys
@@ -18,7 +17,7 @@ var keys = ARGV.Length > 0 ? ARGV : gistMap.Keys
 
     var textFiles = {}
 
-    var fs = vfsFileSystem(`features/${id}`)
+    var fs = vfsFileSystem(`files/${id}`)
     #each file in fs.allFiles()
         var key = file.VirtualPath.replace('/','\\')
         key = optional.contains(key) ? `${key}?` : key
