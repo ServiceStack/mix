@@ -4,28 +4,30 @@
 
 {{
     {
-        'mq':       '355338cd60a32ee9c9fc4761269f7782',
-        'userauth': '9fe61f1967c53d85984402118ee03017',
+        'mq':            '355338cd60a32ee9c9fc4761269f7782',
+        'userauth':      '9fe61f1967c53d85984402118ee03017',
+        'grpc':          '656c29a7257dc374d22d4aa709ba7244',
+        'bcl.proto':     '33232feeeb4f7d2043d27afb1d60259b',
     }
     | to => gistMap
 }}
-['Configure.Mq.cs'] | to => optional
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
+var optional = ['Configure.Mq.cs']
+var keys = ARGV.Length > 0 ? ARGV : gistMap.Keys
 
 #each id in keys
-    gistMap[id] | to => gistId
+    var gistId = gistMap[id]
 
-    {} | to => textFiles
+    var textFiles = {}
 
-    vfsFileSystem(`features/${id}`) | to => fs
+    var fs = vfsFileSystem(`features/${id}`)
     #each file in fs.allFiles()
-        file.VirtualPath.replace('/','\\') | to => key
-        (optional.contains(key) ? `${key}?` : key) | to => key
-        textFiles.putItem(key, file.textContents()) | end
+        var key = file.VirtualPath.replace('/','\\')
+        key = optional.contains(key) ? `${key}?` : key
+        textFiles.putItem(key, file.textContents()) |> end
     /each
 
     `Writing to ${textFiles.count()} files to ${id} ${gistId} ...`
-    vfsGist(gistId, 'GISTLYN_TOKEN'.envVariable()) | to => gist
+    var gist = vfsGist(gistId, 'GISTLYN_TOKEN'.envVariable())
     gist.writeTextFiles(textFiles)
 /each
 ```
