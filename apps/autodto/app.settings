@@ -1,7 +1,7 @@
 debug true
 name Auto DTO
 defaultRedirect /metadata
-features AutoQueryFeature, OpenApiFeature, PostmanFeature, CorsFeature
+features AutoQueryFeature
 AutoQueryFeature { MaxLimit: 100 }
 AutoQueryFeature.GenerateCrudServices { }
 
