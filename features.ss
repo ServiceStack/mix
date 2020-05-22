@@ -4,9 +4,10 @@
 
 {{
     {
-        'mq':            '355338cd60a32ee9c9fc4761269f7782',
-        'userauth':      '9fe61f1967c53d85984402118ee03017',
-        'grpc':          '656c29a7257dc374d22d4aa709ba7244',
+        mq:            '355338cd60a32ee9c9fc4761269f7782',
+        userauth:      '9fe61f1967c53d85984402118ee03017',
+        grpc:          '656c29a7257dc374d22d4aa709ba7244',
+        autocrudgen:   '464a80c15cb3af4f41db7810082dc00c',
     }
     |> to => gistMap
 }}
