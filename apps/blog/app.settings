@@ -1,4 +1,4 @@
-debug false
+debug true
 name Blog Web App
 db sqlite
 db.connection blog.sqlite

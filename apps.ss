@@ -15,31 +15,31 @@
     | to => gistMap
 }}
 
-[] | to => optional
-['blog.sqlite','.gitignore'] | to => ignore
+var optional = []
+var ignore = ['blog.sqlite','.gitignore']
 
-(ARGV.Length > 0 ? ARGV : gistMap.Keys) | to => keys
+var keys = (ARGV.Length > 0 ? ARGV : gistMap.Keys)
 
 #each id in keys
-    gistMap[id] | to => gistId
+    var gistId = gistMap[id]
 
-    {} | to => files
+    var files = {}
 
-    vfsFileSystem(`apps/${id}`) | to => fs
+    var fs = vfsFileSystem(`apps/${id}`)
 
-    fs.deleteDirectory('GPUCache') | end
-    fs.deleteFile('cef.log') | end
+    fs.deleteDirectory('GPUCache') |> end
+    fs.deleteFile('cef.log') |> end
 
     #each file in fs.allFiles()
-        file.VirtualPath.replace('/','\\') | to => key
-        (optional.contains(key) ? `${key}?` : key) | to => key
+        var key = file.VirtualPath.replace('/','\\')
+        (optional.contains(key) ? `${key}?` : key) |> to => key
         #if !ignore.contains(key)
-            files.putItem(key, file.fileContents()) | end
+            files.putItem(key, file.fileContents()) |> end
         /if
     /each
 
     `Writing to ${files.count()} files to ${id} ${gistId} ...`
-    vfsGist(gistId, 'GISTLYN_TOKEN'.envVariable()) | to => gist
+    vfsGist(gistId, 'GISTLYN_TOKEN'.envVariable()) |> to => gist
     gist.writeFiles(files)
 /each
 ```
