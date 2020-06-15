@@ -1,9 +1,5 @@
 API /preview
   * content : string - #Script to evaluate
 
-```code
-'content' | importRequestParams
-
-content   | evalScript({use:{context:true}}) | to => response
-response  | return({ contentType:'text/plain' })
-```
+{{ var response = qs.content.evalTemplate({use:{plugins:'MarkdownScriptPlugin'}}) }}
+{{ response |> return({ contentType:'text/plain' }) }}
