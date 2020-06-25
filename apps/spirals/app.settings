@@ -1,4 +1,4 @@
-debug false
+debug true
 name Spirals
 CefConfig { width:1150, height:1050 }
 appName spirals
