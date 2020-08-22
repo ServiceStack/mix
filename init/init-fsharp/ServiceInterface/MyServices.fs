@@ -8,6 +8,4 @@ type HelloService() =
     inherit Service()
 
     member this.Any (req:Hello) = 
-        let mutable ret = HelloResponse()
-        ret.Result <- "Hello, " + req.Name
-        ret
+        HelloResponse(Result = "Hello, " + req.Name)

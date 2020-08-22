@@ -17,10 +17,10 @@ type AppHost =
     inherit AppHostBase
     new() = { inherit AppHostBase("Hi F#!", typeof<HelloService>.Assembly) }
     override this.Configure(container:Container) :unit =
-        let mutable config = HostConfig()
-        config.UseSameSiteCookies <- Nullable true
-        config.DebugMode <- base.HostingEnvironment.IsDevelopment()
-        base.SetConfig(config) |> ignore
+        base.SetConfig(HostConfig(
+            UseSameSiteCookies = Nullable true,
+            DebugMode = base.HostingEnvironment.IsDevelopment()
+        )) |> ignore
 
 type Startup(Configuration:IConfiguration) =
     inherit ModularStartup()
@@ -35,6 +35,6 @@ type Startup(Configuration:IConfiguration) =
         if env.IsDevelopment() then
             app.UseDeveloperExceptionPage() |> ignore
 
-        let mutable appHost = AppHost()
-        appHost.AppSettings <- NetCoreAppSettings(Configuration) 
-        app.UseServiceStack(appHost) |> ignore
+        app.UseServiceStack(AppHost(
+            AppSettings = NetCoreAppSettings(Configuration)
+        )) |> ignore
