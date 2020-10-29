@@ -30,12 +30,10 @@ namespace MyApp
         {
             appHost.GetPlugin<SharpPagesFeature>()?.ScriptMethods.Add(new DbScriptsAsync());
 
-            using (var db = appHost.Resolve<IDbConnectionFactory>().Open())
+            using var db = appHost.Resolve<IDbConnectionFactory>().Open();
+            if (db.CreateTableIfNotExists<MyTable>())
             {
-                if (db.CreateTableIfNotExists<MyTable>())
-                {
-                    db.Insert(new MyTable { Name = "Seed Data for new MyTable" });
-                }
+                db.Insert(new MyTable { Name = "Seed Data for new MyTable" });
             }
         }
     }    
