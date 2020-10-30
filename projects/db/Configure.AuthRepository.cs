@@ -75,27 +75,24 @@ namespace MyApp
                 Environment.GetEnvironmentVariable("TECHSTACKS_DB"),
                 PostgreSqlDialect.Provider);
 
-            using (var db = dbFactory.Open())
-            using (var dbTechStacks = dbFactory.Open("techstacks"))
+            using var db = dbFactory.Open();
+            using var dbTechStacks = dbFactory.Open("techstacks");
+
+            var existingEmails = db.ColumnDistinct<string>(db.From<AppUser>().Select(x => x.Email));
+            var techstackUsers = dbTechStacks.Select(dbTechStacks.From<CustomUserAuth>());
+            foreach (var user in techstackUsers)
             {
-                var existingEmails = db.ColumnDistinct<string>(db.From<AppUser>().Select(x => x.Email));
-
-                var techstackUsers = dbTechStacks.Select(dbTechStacks.From<CustomUserAuth>());
-
-                foreach (var user in techstackUsers)
+                try
                 {
-                    try
-                    {
-                        if (existingEmails.Contains(user.Email))
-                            continue;
-                        var appUser = user.ConvertTo<AppUser>();
-                        appUser.ProfileUrl = user.DefaultProfileUrl;
-                        authRepo.CreateUserAuth(appUser, "test");
-                    }
-                    catch (Exception ex)
-                    {
-                        ex.Message.Print();
-                    }
+                    if (existingEmails.Contains(user.Email))
+                        continue;
+                    var appUser = user.ConvertTo<AppUser>();
+                    appUser.ProfileUrl = user.DefaultProfileUrl;
+                    authRepo.CreateUserAuth(appUser, "test");
+                }
+                catch (Exception ex)
+                {
+                    ex.Message.Print();
                 }
             }
         }
