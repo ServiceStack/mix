@@ -17,7 +17,7 @@ namespace MyApp
         {
             var store = DocumentStore.For(opts =>
             {
-                opts.Connection(Configuration.GetConnectionString("Marten") 
+                opts.Connection(Configuration.GetConnectionString("Marten")
                     ?? "host=localhost;username=test;password=test;database=marten");
 
                 Options.ForEach(fn => fn(opts));
@@ -25,5 +25,5 @@ namespace MyApp
             store.Advanced.Clean.CompletelyRemoveAll();
             services.AddSingleton<IDocumentStore>(store);
         }
-    }    
+    }
 }

@@ -10,10 +10,10 @@ namespace MyApp
     public class MyTable
     {
         [AutoIncrement]
-        public int Id { get; set; }        
+        public int Id { get; set; }
         public string Name { get; set; }
     }
-        
+
     public class ConfigureDb : IConfigureServices, IConfigureAppHost
     {
         IConfiguration Configuration { get; }
@@ -22,7 +22,7 @@ namespace MyApp
         public void Configure(IServiceCollection services)
         {
             services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
-                Configuration.GetConnectionString("DefaultConnection") 
+                Configuration.GetConnectionString("DefaultConnection")
                     ?? "Server=localhost;Database=test;User Id=test;Password=test;MultipleActiveResultSets=True;",
                 SqlServer2012Dialect.Provider));
         }
@@ -37,5 +37,5 @@ namespace MyApp
                 db.Insert(new MyTable { Name = "Seed Data for new MyTable" });
             }
         }
-    }    
+    }
 }

@@ -10,10 +10,10 @@ namespace MyApp
     public class MyTable
     {
         [AutoIncrement]
-        public int Id { get; set; }        
+        public int Id { get; set; }
         public string Name { get; set; }
     }
-        
+
     public class ConfigureDb : IConfigureServices, IConfigureAppHost
     {
         IConfiguration Configuration { get; }
@@ -36,5 +36,5 @@ namespace MyApp
                 db.Insert(new MyTable { Name = "Seed Data for new MyTable" });
             }
         }
-    }    
+    }
 }
