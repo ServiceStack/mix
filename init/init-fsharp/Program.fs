@@ -18,8 +18,8 @@ module Program =
     let CreateHostBuilder args =
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(fun webBuilder ->
-                ModularExtensions.UseModularStartup<Startup>(webBuilder) |> ignore
-            )
+            ModularExtensions.UseModularStartup<Startup>(webBuilder)
+            |> ignore)
 
     [<EntryPoint>]
     let main args =

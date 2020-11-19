@@ -15,26 +15,24 @@ open MyApp.ServiceInterface
 
 type AppHost =
     inherit AppHostBase
-    new() = { inherit AppHostBase("Hi F#!", typeof<HelloService>.Assembly) }
-    override this.Configure(container:Container) :unit =
-        base.SetConfig(HostConfig(
-            UseSameSiteCookies = Nullable true,
-            DebugMode = base.HostingEnvironment.IsDevelopment()
-        )) |> ignore
+    new() = { inherit AppHostBase("My App", typeof<HelloService>.Assembly) }
 
-type Startup(Configuration:IConfiguration) =
+    override this.Configure(container: Container): unit =
+        base.SetConfig
+            (HostConfig(UseSameSiteCookies = Nullable true, DebugMode = base.HostingEnvironment.IsDevelopment()))
+        |> ignore
+
+type Startup(Configuration: IConfiguration) =
     inherit ModularStartup()
 
     // This method gets called by the runtime. Use this method to add services to the container.
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-    member this.ConfigureServices(services: IServiceCollection) =
-        ()
+    member this.ConfigureServices(services: IServiceCollection) = ()
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
-        if env.IsDevelopment() then
-            app.UseDeveloperExceptionPage() |> ignore
+        if env.IsDevelopment()
+        then app.UseDeveloperExceptionPage() |> ignore
 
-        app.UseServiceStack(AppHost(
-            AppSettings = NetCoreAppSettings(Configuration)
-        )) |> ignore
+        app.UseServiceStack(new AppHost(AppSettings = NetCoreAppSettings(Configuration)))
+        |> ignore
