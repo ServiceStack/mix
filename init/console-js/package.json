@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gistcafe": "0.0.1"
+    "gistcafe": "^1.0.0"
   }
 }
