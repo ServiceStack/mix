@@ -12,6 +12,9 @@
 GPUCache/
 wip/
 code/ormlite/
+*.packages
+.dart_tool
+*.lock
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
