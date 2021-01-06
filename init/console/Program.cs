@@ -12,7 +12,7 @@ var orgRepos = $"https://api.github.com/orgs/{orgName}/repos"
 $"Top 3 '{orgName}' Github Repos:".Print();
 orgRepos.Take(3).ToList().PrintDump();
 
-"\n".Print();
+"".Print();
 orgRepos.Take(10).Map(x => new { x.Name, x.Language, x.Watchers, x.Forks }).PrintDumpTable();
 
 Inspect.vars(new { orgRepos });
@@ -26,6 +26,4 @@ public class GithubRepo
     public string Language { get; set; }
     public int Watchers { get; set; }
     public int Forks { get; set; }
-
-    public override string ToString() => Name;
 }

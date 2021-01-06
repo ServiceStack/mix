@@ -30,7 +30,7 @@ module Program =
         $"Top 3 '{orgName}' Github Repos:".Print()
         orgRepos.Take(3).ToList().PrintDump()
 
-        "\n".Print()
+        "".Print()
         orgRepos.Take(10).Select(fun x -> 
             {| Name = x.Name; Language = x.Language; Watchers = x.Watchers; Forks = x.Forks |})
             .PrintDumpTable()
