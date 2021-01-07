@@ -15,6 +15,9 @@ code/ormlite/
 *.packages
 .dart_tool
 *.lock
+.build/
+build/
+.gradle/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
