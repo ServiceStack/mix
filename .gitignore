@@ -18,6 +18,7 @@ code/ormlite/
 .build/
 build/
 .gradle/
+.gistrun/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
