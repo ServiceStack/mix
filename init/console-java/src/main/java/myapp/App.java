@@ -8,7 +8,7 @@ import net.servicestack.gistcafe.Inspect;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 
 class GithubRepo {
@@ -38,8 +38,6 @@ public class App {
         String[] headers = { "name","language","watchers","forks" };
         Inspect.printDumpTable(orgRepos.subList(0, 10), Arrays.asList(headers));
 
-        Inspect.vars(new HashMap<String, Object>() {{
-            put("orgRepos", orgRepos);
-        }});
+        Inspect.vars(Collections.singletonMap("orgRepos", orgRepos));
     }
 }
