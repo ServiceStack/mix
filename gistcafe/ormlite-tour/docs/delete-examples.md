@@ -4,11 +4,11 @@ Deleting rows in OrmLite is simple and straight-forward with APIs to support mul
 use-cases including deleting by entity, by Id, by lambda expression, by SqlExpression, 
 or Custom SQL expression:
 
- - [Basic Delete Examples](#gist=2ace74e5c3bc5367ae2cde09cdcfc4a1)
+ - [Basic Delete Examples](#doc=delete-examples.md&gist=2094c4cfd41c709241c8647b39be0b10)
 
 As well as API's for deleting all or multiple rows:
 
- - [Delete Multiple Rows Examples](#gist=35ad968509bc428f578dfee3e326325f)
+ - [Delete Multiple Rows Examples](#doc=delete-examples.md&gist=e40f2e70f6e5f4e611eba8ec6b031b0c)
 
 ---
 

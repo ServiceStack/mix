@@ -5,7 +5,7 @@ var fs = vfsFileSystem('.')
 var dataConent = fs.file('/home/data.cs').textContents()
 var csProjConent = fs.file('/home/MyApp.csproj').textContents()
 
-var exampleDirs = ['select-examples','insert-examples','update-examples','delete-examples','create-table-examples','modify-schema-examples']
+var exampleDirs = ['select-examples','update-examples','delete-examples','modify-schema-examples']
 #each exampleDir in exampleDirs
     #each dir in fs.dirDirectories(exampleDir)
         fs.writeFile(`/${dir.VirtualPath}/data.cs`, dataConent)

@@ -4,7 +4,7 @@ OrmLite provides Typed APIs for modifying Table Schemas that makes it easy to in
 the state of an RDBMS Table which can be used to determine what modifications you want 
 to apply to it to upgrade it to the latest version:
 
- - [Modify Table Schema Examples](#gist=bcff262634aa255d5ef4a2e4fb424391)
+ - [Modify Table Schema Examples](#doc=modify-schema.md&gist=4467fba9a611cc060c193568c3c07dff)
 
 
 ---
