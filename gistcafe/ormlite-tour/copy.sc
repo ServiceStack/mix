@@ -1,3 +1,5 @@
+* Usage: x run copy.sc *
+
 var fs = vfsFileSystem('.')
 
 var dataConent = fs.file('/home/data.cs').textContents()
