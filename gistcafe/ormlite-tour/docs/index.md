@@ -20,12 +20,12 @@ For a quick 1-page dive into OrmLite, checkout:
 
 See each section for more in-depth examples of OrmLite's features:
 
- - [SELECT Examples](#doc=select-examples.md) - Typed, Advanced, Custom and dynamic Queries with OrmLite
- - [INSERT Examples](#doc=insert-examples.md) - Inserting records
- - [UPDATE Examples](#doc=update-examples.md) - Updating records
- - [DELETE Examples](#doc=delete-examples.md) - Deleting records
- - [CREATE Table Examples](#doc=create-tables.md) - Creating Table Schemas for POCO Type definitions
- - [Modify Schema Examples](#doc=modify-schema.md) - Modifying existing tables
+ - [SELECT Examples](#doc=select-examples.md&gist=43a09ba142f24ab2ec878284c8b942ca) - Typed, Advanced, Custom and dynamic Queries with OrmLite
+ - [INSERT Examples](#doc=insert-examples.md&gist=f9d55e68175169a5568ecef22d14921d) - Inserting records
+ - [UPDATE Examples](#doc=update-examples.md&gist=974a093d0b5f68ba9c3801c72bf37778) - Updating records
+ - [DELETE Examples](#doc=delete-examples.md&gist=2094c4cfd41c709241c8647b39be0b10) - Deleting records
+ - [CREATE Table Examples](#doc=create-tables.md&gist=ab8d48cff82044238acd2b5730e63e08) - Creating Table Schemas for POCO Type definitions
+ - [Modify Schema Examples](#doc=modify-schema.md&gist=4467fba9a611cc060c193568c3c07dff) - Modifying existing tables
  
 <h3><a target="_top" href="https://github.com/ServiceStack/ServiceStack.OrmLite">OrmLite's Documentation</a></h3>
 

@@ -18,4 +18,4 @@ A popular use-case where you'd want to use Attributes is to define Foreign Keys:
 
 ---
 
-### [< DELETE Examples](#doc=delete-examples.md) · [Home](#doc=index.md) · [Modify Schema Examples >](#doc=modify-schema.md)
+### [< DELETE Examples](#doc=delete-examples.md) · [Home](#doc=index.md) · [Modify Schema Examples >](#doc=modify-schema.md&gist=4467fba9a611cc060c193568c3c07dff)

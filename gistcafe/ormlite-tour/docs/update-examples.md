@@ -20,4 +20,4 @@ When you need to update existing values you can use `UpdateAdd()` Typed APIs:
 
 ---
 
-### [< INSERT Examples](#doc=insert-examples.md) · [Home](#doc=index.md) · [DELETE Examples >](#doc=delete-examples.md)
+### [< INSERT Examples](#doc=insert-examples.md&gist=f9d55e68175169a5568ecef22d14921d) · [Home](#doc=index.md) · [DELETE Examples >](#doc=delete-examples.md&gist=2094c4cfd41c709241c8647b39be0b10)

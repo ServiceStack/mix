@@ -41,4 +41,4 @@ unstructured results when the Schema is unknown or unavailable:
 
 ---
 
-### [< Home](#doc=index.md) · [INSERT Examples >](#doc=insert-examples.md)
+### [< Home](#doc=index.md) · [INSERT Examples >](#doc=insert-examples.md&gist=f9d55e68175169a5568ecef22d14921d)

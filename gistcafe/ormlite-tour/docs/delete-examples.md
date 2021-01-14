@@ -12,4 +12,4 @@ As well as API's for deleting all or multiple rows:
 
 ---
 
-### [< UPDATE Examples](#doc=update-examples.md) · [Home](#doc=indexmd) · [CREATE TABLE Examples >](#doc=create-tabled.md)
+### [< UPDATE Examples](#doc=update-examples.md) · [Home](#doc=indexmd) · [CREATE TABLE Examples >](#doc=create-tabled.md&gist=ab8d48cff82044238acd2b5730e63e08)
