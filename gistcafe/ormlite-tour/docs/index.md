@@ -56,7 +56,3 @@ See each section for more in-depth examples of OrmLite's features:
   - Stored Procedure APIs
   - Table aliases
   - Mocking
-
----
-
-### [SELECT Examples >](#doc=select-examples.md&gist=43a09ba142f24ab2ec878284c8b942ca)

@@ -9,4 +9,4 @@ to apply to it to upgrade it to the latest version:
 
 ---
 
-### [< CREATE Table Examples](#doc=create-tables.md&gist=ab8d48cff82044238acd2b5730e63e08) · [Home](#doc=index.md)
+### [< CREATE Table](#doc=create-tables.md&gist=ab8d48cff82044238acd2b5730e63e08) [ ⌂ ](#doc=index.md)

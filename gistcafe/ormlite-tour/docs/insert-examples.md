@@ -21,4 +21,4 @@ RDBMS Schema:
 
 ---
 
-### [< SELECT Examples](#doc=select-examples.md&gist=43a09ba142f24ab2ec878284c8b942ca) · [Home](#doc=index.md) · [UPDATE Examples >](#doc=update-examples.md&gist=974a093d0b5f68ba9c3801c72bf37778)
+### [< SELECT Examples](#doc=select-examples.md&gist=43a09ba142f24ab2ec878284c8b942ca) [ ⌂ ](#doc=index.md) [UPDATE Examples >](#doc=update-examples.md&gist=974a093d0b5f68ba9c3801c72bf37778)
