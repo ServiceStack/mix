@@ -19,9 +19,12 @@ code/ormlite/
 build/
 .gradle/
 .gistrun/
+target/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+.lein-repl-history
+.nrepl-port
 
 # Build results
 [Dd]ebug/
