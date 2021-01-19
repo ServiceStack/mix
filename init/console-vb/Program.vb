@@ -27,7 +27,7 @@ Module Program
         Console.WriteLine($"Top 3 '{orgName}' Github Repos:")
         orgRepos.Take(3).ToList().PrintDump()
 
-        Console.WriteLine($"\nTop 10 {orgName} Github Repos:\n")
+        Console.WriteLine($"{vbCrLf}Top 10 {orgName} Github Repos:{vbCrLf}")
         orgRepos.Take(10).Select(Function(x) _
             New With { x.Name, x.Language, x.Watchers, x.Forks }).PrintDumpTable()
 

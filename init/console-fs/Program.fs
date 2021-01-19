@@ -18,9 +18,7 @@ module Program =
 
     [<EntryPoint>]
     let main args =
-
         let orgName = "dotnet"
-
         let orgRepos = 
             $"https://api.github.com/orgs/{orgName}/repos"
                 .GetJsonFromUrl(fun httpReq -> httpReq.UserAgent <- "gist.cafe")
@@ -36,6 +34,4 @@ module Program =
             .PrintDumpTable()
 
         Inspect.vars({| orgRepos = orgRepos |})
-
-        let exitCode = 0
-        exitCode
+        0 //exitCode

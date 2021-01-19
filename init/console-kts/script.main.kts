@@ -26,6 +26,7 @@ println("Top 3 $orgName GitHub Repos:")
 Inspect.printDump(orgRepos.take(3))
 
 println("\nTop 10 $orgName GitHub Repos:")
-Inspect.printDumpTable(orgRepos.take(10), listOf("name","language","watchers","forks"))
+Inspect.printDumpTable(orgRepos.take(10), 
+    listOf("name","language","watchers","forks"))
 
 Inspect.vars(mapOf("orgRepos" to orgRepos))
