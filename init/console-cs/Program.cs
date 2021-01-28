@@ -13,7 +13,8 @@ $"Top 3 '{orgName}' Github Repos:".Print();
 orgRepos.Take(3).ToList().PrintDump();
 
 $"\nTop 10 {orgName} Github Repos:\n".Print();
-orgRepos.Take(10).Map(x => new { x.Name, x.Language, x.Watchers, x.Forks }).PrintDumpTable();
+orgRepos.Take(10).Map(x => new { 
+    x.Name, x.Language, x.Watchers, x.Forks }).PrintDumpTable();
 
 Inspect.vars(new { orgRepos });
 
