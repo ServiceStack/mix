@@ -1,0 +1,5 @@
+{
+    "require": {
+        "servicestack/gistcafe": "^0.0.2"
+    }
+}
