@@ -16,7 +16,7 @@ code/ormlite/
 .dart_tool
 *.lock
 .build/
-#build/
+build/
 .gradle/
 .gistrun/
 target/
