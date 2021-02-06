@@ -55,9 +55,8 @@ func main() {
 	inspect.PrintDump(orgRepos[0:3])
 
 	fmt.Printf("\nTop 10 '%s' Github Repos:\n", orgName)
-	inspect.TableOptions{Headers: [] string{
-		"Name", "Lang", "Watchers", "Forks"}}
-		.PrintDumpTable(orgRepos[0:10])
+	inspect.TableOptions{Headers: []string{
+		"Name", "Lang", "Watchers", "Forks"}}.PrintDumpTable(orgRepos[0:10])
 
 	inspect.Vars(map[string]interface{}{"orgRepos": orgRepos})
 }
