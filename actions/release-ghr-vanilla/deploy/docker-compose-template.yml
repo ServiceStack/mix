@@ -9,7 +9,7 @@ services:
     environment:
       VIRTUAL_HOST: ${HOST_DOMAIN}
       LETSENCRYPT_HOST: ${HOST_DOMAIN}
-      LETSENCRYPT_EMAIL: you@example.com
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
 
 networks:
   shared:

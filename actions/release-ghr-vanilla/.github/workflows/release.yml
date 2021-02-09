@@ -11,7 +11,7 @@ jobs:
         
       - name: dotnet publish
         run: |
-          dotnet publish ./MyApp/ -o publish
+          dotnet publish ./MyApp/ -o publish -c release
           
       - name: repository name fix
         run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
@@ -42,6 +42,7 @@ jobs:
         run: |
           echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
           echo "domain=${{ secrets.DEPLOY_HOST }}" >> $GITHUB_ENV
+          echo "letsencrypt_email=${{ secrets.LETSENCRYPT_EMAIL }}" >> $GITHUB_ENV
 
       - name: docker-compose file prep
         uses: danielr1996/envsubst-action@1.0.0
@@ -49,9 +50,10 @@ jobs:
           RELEASE_VERSION: ${{ github.event.release.tag_name }}
           IMAGE_REPO: ${{ env.image_repository_name }}
           HOST_DOMAIN: ${{ env.domain }}
+          LETSENCRYPT_EMAIL: ${{ env.letsencrypt_email }}
         with:
           input: deploy/docker-compose-template.yml
-          output: deploy/docker-compose.yml
+          output: deploy/docker-compose-MyApp.yml
 
       - name: copy compose file via scp
         uses: appleboy/scp-action@v0.1.1
@@ -60,7 +62,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "deploy/docker-compose.yml"
+          source: "deploy/docker-compose-MyApp.yml"
           target: "~/"
 
       - name: Set the value
@@ -81,4 +83,4 @@ jobs:
           envs: APPTOKEN,USERNAME
           script: |
             echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
-            docker-compose -f ~/deploy/docker-compose.yml up -d
+            docker-compose -f ~/deploy/docker-compose-MyApp.yml up -d
