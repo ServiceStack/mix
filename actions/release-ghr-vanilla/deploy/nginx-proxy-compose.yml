@@ -1,9 +1,10 @@
-version: "3.9"
+version: '2'
 
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -19,6 +20,7 @@ services:
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-proxy-le
+    restart: always
     environment:
       - DEFAULT_EMAIL=you@example.com
     volumes_from:
@@ -36,8 +38,8 @@ volumes:
   dhparam:
   certs:
   acme:
- 
- networks:
+
+networks:
   default:
     external:
       name: webproxy

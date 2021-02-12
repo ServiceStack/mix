@@ -22,14 +22,14 @@ jobs:
         run: dotnet build
         working-directory: .
 
-      - name: Check tests exist
-        id: check_files
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "./MyApp.Tests/MyApp.Tests.csproj"
-
       - name: test
-        if: steps.check_files.output.files_exists == 'true'
-        run: dotnet test
+        run: |
+          dotnet test
+          if [ $? -eq 0 ]; then
+            echo TESTS PASSED
+          else
+            echo TESTS FAILED
+            exit 1
+          fi
         working-directory: ./MyApp.Tests
 
