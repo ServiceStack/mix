@@ -1,0 +1,76 @@
+name: Release
+on:
+  release:
+    types: [published]
+jobs:
+  push_to_ecr:
+    runs-on: ubuntu-20.04
+    outputs:
+      image_url: ${{ steps.push_image_to_ecr.outputs.digest }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run dotnet publish
+        run: |
+          dotnet publish ./MyApp/ -o publish -c release
+
+      - name: repository name fix
+        run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Create ECR repo if not exists.
+        env:
+          ECR_REPOSITORY: ${{ env.image_repository_name }}
+        run: |
+          aws ecr describe-repositories --repository-names ${ECR_REPOSITORY} || aws ecr create-repository --repository-name ${ECR_REPOSITORY}
+
+      - name: Build and push to ECR
+        id: push_image_to_ecr
+        uses: docker/build-push-action@v2.2.2
+        with:
+          file: MyApp/Dockerfile
+          context: .
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.image_repository_name }}:${{ github.event.release.tag_name }}
+
+  deploy_ecs:
+    needs: push_to_ecr
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Repository name fix and env values setup
+        run: |
+          echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "domain=${{ secrets.DEPLOY_HOST }}" >> $GITHUB_ENV
+          echo "letsencrypt_email=${{ secrets.LETSENCRYPT_EMAIL }}" >> $GITHUB_ENV
+
+      - name: Populate task definition template
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+          APP_NAME: ${{ env.image_repository_name }}
+          IMAGE_URL: ${{ needs.push_to_ecr.outputs.image_url }}
+          HOST_DOMAIN: ${{ env.domain }}
+          LETSENCRYPT_EMAIL: ${{ env.letsencrypt_email }}
+        with:
+          input: deploy/task-definition-template.yml
+          output: deploy/task-definition.yml
+
+#      - name: Register task definition
+#
+#
+#      - name: Deploy task to ECS
+

@@ -1,0 +1,40 @@
+{
+  "family": "${IMAGE_REPO}",
+  "requiresCompatibilities": [
+    "EC2"
+  ],
+  "networkMode": "bridge",
+  "containerDefinitions": [
+    {
+      "portMappings": [
+        {
+          "hostPort": 8081,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "VIRTUAL_HOST",
+          "value": "${HOST_DOMAIN}"
+        },
+        {
+          "name": "LETSENCRYPT_EMAIL",
+          "value": "${LETSENCRYPT_EMAIL}"
+        },
+        {
+          "name": "APP_VERSION",
+          "value": "${RELEASE_VERSION}"
+        }
+      ],
+      "mountPoints": [],
+      "memory": 128,
+      "volumesFrom": [],
+      "image": "${IMAGE_URL}",
+      "essential": true,
+      "links": ["webproxy:webproxy"],
+      "name": "${IMAGE_REPO}"
+    }
+  ]
+}
