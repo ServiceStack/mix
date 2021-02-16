@@ -33,7 +33,7 @@ jobs:
   
   deploy_via_ssh:
     needs: push_to_registry
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: checkout
         uses: actions/checkout@v2
