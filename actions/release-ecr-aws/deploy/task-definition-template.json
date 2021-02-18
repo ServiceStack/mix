@@ -8,7 +8,6 @@
     {
       "portMappings": [
         {
-          "hostPort": 8081,
           "protocol": "tcp",
           "containerPort": 80
         }
@@ -37,7 +36,6 @@
       "volumesFrom": [],
       "image": "${IMAGE_URL}",
       "essential": true,
-      "links": ["webproxy:webproxy"],
       "name": "${APP_NAME}"
     }
   ]
