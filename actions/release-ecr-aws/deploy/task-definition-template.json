@@ -1,5 +1,5 @@
 {
-  "family": "${IMAGE_REPO}",
+  "family": "${APP_NAME}",
   "requiresCompatibilities": [
     "EC2"
   ],
@@ -20,6 +20,10 @@
           "value": "${HOST_DOMAIN}"
         },
         {
+          "name": "LETSENCRYPT_HOST",
+          "value": "${HOST_DOMAIN}"
+        },
+        {
           "name": "LETSENCRYPT_EMAIL",
           "value": "${LETSENCRYPT_EMAIL}"
         },
@@ -34,7 +38,7 @@
       "image": "${IMAGE_URL}",
       "essential": true,
       "links": ["webproxy:webproxy"],
-      "name": "${IMAGE_REPO}"
+      "name": "${APP_NAME}"
     }
   ]
 }
