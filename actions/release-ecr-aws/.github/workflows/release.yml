@@ -3,26 +3,6 @@ on:
   release:
     types: [published]
 jobs:
-  # The `init_nginx` job can be deleted if it is already up and running for faster builds, is only needed once.
-  init_nginx:
-    runs_on: ubuntu-20.04
-    steps:
-      - name: Checkout
-          uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Create task definition if doesn't exist
-        run: aws ecs describe-task-definition --task-definition nginx-proxy || aws ecs register-task-definition --cli-input-json file://deploy/nginx-task-definition.json
-
-      - name: Create ECS Service if not exists.
-        run: aws ecs describe-services --cluster ${{ env.cluster_name }} --services nginx-proxy | jq '.services[0]' -e || aws ecs create-service --cluster ${{ env.cluster_name }} --service-name nginx-proxy --task-definition nginx-proxy --desired-count 1
-
   push_to_ecr:
     runs-on: ubuntu-20.04
     steps:
