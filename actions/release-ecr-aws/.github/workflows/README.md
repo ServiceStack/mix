@@ -76,7 +76,9 @@ These secrets are used to populate variables within GitHub Actions and other con
 
 For the AWS access, a separate user specifically for deploying via GitHub Actions should be used.
 
-The policies required for the complete initial setup will be `AmazonEC2ContainerRegistryFullAccess` and `AmazonECS_FullAccess`.
+The policies required for the complete initial setup will be: 
+- `AmazonEC2ContainerRegistryFullAccess`
+- `AmazonECS_FullAccess`
 
 Once the application is successfully deployed the first time, reduced access for both ECR and ECS can be used instead. For application updates, the GitHub Action can use the following policy.
 
@@ -135,6 +137,7 @@ Once the application is successfully deployed the first time, reduced access for
 }
 ```
 > Further permission reduction can be done by reducing what resources can be accessed.
+> Application permissions can be controlled via `taskRoleArn`, see [AWS docs for details](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html).
 
 ## What's the process of the `release.yml`?
 
