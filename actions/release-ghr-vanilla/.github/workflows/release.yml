@@ -11,7 +11,7 @@ jobs:
         
       - name: dotnet publish
         run: |
-          dotnet publish ./MyApp/ -o publish -c release
+          dotnet publish ./MyApp/ -o publish -c release -r linux-x64
           
       - name: repository name fix
         run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV

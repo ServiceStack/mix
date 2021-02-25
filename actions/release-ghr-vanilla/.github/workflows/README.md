@@ -26,17 +26,17 @@ For example, once copied to remote `~/nginx-proxy-compose.yml`, the following co
 docker-compose -f ~/nginx-proxy-compose.yml up -d
 ```
 
-This will run an nginx reverse along with a companion container that will watch for additional containers in the same docker network and attempt to initialize them with valid TLS certificates.
+This will run an nginx reverse proxy along with a companion container that will watch for additional containers in the same docker network and attempt to initialize them with valid TLS certificates.
 
 ## GitHub Repository setup
 The `release.yml` assumes 6 secrets have been setup.
 
 - CR_PAT - GitHub Personal Token with read/write access to packages.
 - DEPLOY_HOST - hostname used to SSH to, this can either be an IP address or subdomain with A record pointing to the server.
-- DEPLOY_PORT - SSH port, usually 22
+- DEPLOY_PORT - SSH port, usually `22`.
 - DEPLOY_USERNAME - the username being logged into via SSH. Eg, `ubuntu`, `ec2-user`, `root` etc.
 - DEPLOY_KEY - SSH private key used to remotely access deploy server/app host.
-- LETSENCRYPT_EMAIL - Email address for your TLS certificate generation
+- LETSENCRYPT_EMAIL - Email address, required for Let's Encrypt automated TLS certificates.
 
 These secrets are used to populate variables within GitHub Actions and other configuration files.
 
