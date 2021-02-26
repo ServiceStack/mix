@@ -8,10 +8,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-        
-      - name: dotnet publish
-        run: |
-          dotnet publish ./MyApp/ -o publish -c release -r linux-x64
           
       - name: repository name fix
         run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
@@ -26,7 +22,7 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v2.2.2
         with:
-          file: MyApp/Dockerfile
+          file: Dockerfile
           context: .
           push: true
           tags: ghcr.io/${{ env.image_repository_name }}:${{ github.event.release.tag_name }}

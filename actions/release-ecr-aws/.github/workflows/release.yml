@@ -9,9 +9,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run dotnet publish
-        run: dotnet publish ./MyApp/ -o publish -c release
-
       - name: repository name fix
         run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
@@ -35,7 +32,7 @@ jobs:
         id: push_image_to_ecr
         uses: docker/build-push-action@v2.2.2
         with:
-          file: MyApp/Dockerfile
+          file: Dockerfile
           context: .
           push: true
           tags: ${{ steps.login_ecr.outputs.registry }}/${{ env.image_repository_name }}:${{ github.event.release.tag_name }}
