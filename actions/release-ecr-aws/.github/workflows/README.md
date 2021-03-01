@@ -89,6 +89,17 @@ The `release.yml` assumes 6 secrets have been setup.
 - HOST_DOMAIN - Domain/sub-domain of your application, eg `my-app.example.com` .
 - LETSENCRYPT_EMAIL - Email address, required for Let's Encrypt automated TLS certificates.
 
+These secrets can use the [GitHub CLI](https://cli.github.com/manual/gh_secret_set) for ease of creation. Eg, using the GitHub CLI the following can be set.
+
+```bash
+gh secret set AWS_ACCESS_KEY_ID -b"<AWS_ACCESS_KEY_ID>"
+gh secret set AWS_SECRET_ACCESS_KEY -b"<AWS_SECRET_ACCESS_KEY>"
+gh secret set AWS_REGION -b"<AWS_REGION, eg us-east-1>"
+gh secret set AWS_ECS_CLUSTER -b"<AWS_ECS_CLUSTER, eg my-apps>"
+gh secret set HOST_DOMAIN -b"<HOST_DOMAIN, eg my-app.example.com>"
+gh secret set LETSENCRYPT_EMAIL -b"<LETSENCRYPT_EMAIL, eg me@example.com>"
+```
+
 These secrets are used to populate variables within GitHub Actions and other configuration files.
 
 For the AWS access, a separate user specifically for deploying via GitHub Actions should be used.
