@@ -38,6 +38,17 @@ The `release.yml` assumes 6 secrets have been setup.
 - DEPLOY_KEY - SSH private key used to remotely access deploy server/app host.
 - LETSENCRYPT_EMAIL - Email address, required for Let's Encrypt automated TLS certificates.
 
+These secrets can use the [GitHub CLI](https://cli.github.com/manual/gh_secret_set) for ease of creation. Eg, using the GitHub CLI the following can be set.
+
+```bash
+gh secret set CR_PAT -b"<CR_PAT, Container Registry Personal Access Token>"
+gh secret set DEPLOY_HOST -b"<DEPLOY_HOST, domain or subdomain for your application and server host.>"
+gh secret set DEPLOY_PORT -b"<DEPLOY_PORT, eg SSH port, usually 22>"
+gh secret set DEPLOY_USERNAME -b"<DEPLOY_USERNAME, the username being logged into via SSH. Eg, `ubuntu`, `ec2-user`, `root` etc.>"
+gh secret set DEPLOY_KEY -b"<DEPLOY_KEY, SSH private key used to remotely access deploy server/app host.>"
+gh secret set LETSENCRYPT_EMAIL -b"<LETSENCRYPT_EMAIL, Email address for your TLS certificate generation, eg me@example.com>"
+```
+
 These secrets are used to populate variables within GitHub Actions and other configuration files.
 
 > If you are deploying multiple ServiceStack apps via this pattern, make sure the host port in the `docker-compose-template.yml` is not being used. This defaults as 8081.
