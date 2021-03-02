@@ -100,7 +100,7 @@ gh secret set HOST_DOMAIN -b"<HOST_DOMAIN, eg my-app.example.com>"
 gh secret set LETSENCRYPT_EMAIL -b"<LETSENCRYPT_EMAIL, eg me@example.com>"
 ```
 
-These secrets are used to populate variables within GitHub AcDEPLOY_HOSTtions and other configuration files.
+These secrets are used to populate variables within GitHub Actions and other configuration files.
 
 For the AWS access, a separate user specifically for deploying via GitHub Actions should be used.
 
