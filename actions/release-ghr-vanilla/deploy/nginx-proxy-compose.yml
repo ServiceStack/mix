@@ -38,8 +38,3 @@ volumes:
   dhparam:
   certs:
   acme:
-
-networks:
-  default:
-    external:
-      name: webproxy
