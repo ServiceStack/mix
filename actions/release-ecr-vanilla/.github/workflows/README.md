@@ -29,7 +29,7 @@ This will run an nginx reverse proxy along with a companion container that will 
 > If the container doesn't have the environment variable `VIRTUAL_HOST` set, it will be ignored.
 
 ## GitHub Repository setup
-The `release.yml` assumes 6 secrets have been setup.
+The `release.yml` assumes 8 secrets have been setup.
 
 - AWS_ACCESS_KEY_ID - AWS access key for programmatic access to AWS APIs.
 - AWS_SECRET_ACCESS_KEY - AWS access secrets for programmatic access to AWS APIs.

@@ -51,9 +51,6 @@ gh secret set LETSENCRYPT_EMAIL -b"<LETSENCRYPT_EMAIL, Email address for your TL
 
 These secrets are used to populate variables within GitHub Actions and other configuration files.
 
-> If you are deploying multiple ServiceStack apps via this pattern, make sure the host port in the `docker-compose-template.yml` is not being used. This defaults as 8081.
-
-
 ## What's the process of `release.yml`?
 
 ![](https://raw.githubusercontent.com/ServiceStack/docs/master/docs/images/mix/release-ghr-vanilla-diagram.png)
