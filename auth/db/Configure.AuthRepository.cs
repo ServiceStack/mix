@@ -49,8 +49,7 @@ namespace MyApp
         {
             var authRepo = appHost.Resolve<IAuthRepository>();
             authRepo.InitSchema();
-            if(appHost.GetHostingEnvironment().EnvironmentName != Environments.Production)
-                CreateUser(authRepo, "admin@email.com", "Admin User", "p@55wOrd", roles:new[]{ RoleNames.Admin });
+            //CreateUser(authRepo, "admin@email.com", "Admin User", "p@55wOrd", roles:new[]{ RoleNames.Admin });
         }
 
         public void BeforePluginsLoaded(IAppHost appHost)
