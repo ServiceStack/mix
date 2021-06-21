@@ -26,7 +26,7 @@ namespace MyApp
         public string Headers { get; set; }
         public List<string> DefaultLabelFmt { get; set; }
 
-        public Dictionary<string, string> FriendlyTypeNames = new() {
+        public readonly Dictionary<string, string> FriendlyTypeNames = new() {
             {"Int32", "int"},
             {"Int64", "long"},
             {"Boolean", "bool"},
@@ -251,7 +251,7 @@ namespace MyApp
                                     host = url.Host,
                                     port = url.Port.ToString(),
                                     protocol = url.Scheme,
-                                    path = url.LocalPath.Split("/", StringSplitOptions.RemoveEmptyEntries),
+                                    path = url.LocalPath.SplitPaths(),
                                     query = !HttpUtils.HasRequestBody(verb) 
                                         ? routeData.Select(x => x.key)
                                             .ApplyPropertyTypes(propertyTypes)
@@ -296,7 +296,7 @@ namespace MyApp
                                 host = url.Host,
                                 port = url.Port.ToString(),
                                 protocol = url.Scheme,
-                                path = url.LocalPath.Split("/", StringSplitOptions.RemoveEmptyEntries),
+                                path = url.LocalPath.SplitPaths(),
                                 query = !HttpUtils.HasRequestBody(verb) 
                                     ? requestParams.Select(x => x.key)
                                         .Where(x => !x.StartsWith(":"))
@@ -351,6 +351,10 @@ namespace MyApp
 
     public static class PostmanExtensions
     {
+        private static readonly char[] PathDelim = {'/'};
+        internal static string[] SplitPaths(this string text) => 
+            text.Split(PathDelim, StringSplitOptions.RemoveEmptyEntries);
+
         public static string ToPostmanPathVariables(this string path)
         {
             return path.Replace("{", ":").Replace("}", "").TrimEnd('*');
@@ -391,5 +395,15 @@ namespace MyApp
             data.Each(x => x.value = typeMap.TryGetValue(x.key, out typeName) ? typeName : x.value ?? defaultValue);
             return data;
         }
+        
+        public static Dictionary<string, string> ApplyPropertyTypes(this IEnumerable<string> names,
+            Dictionary<string, string> typeMap,
+            string defaultValue = "")
+        {
+            var to = new Dictionary<string, string>();
+            string typeName;
+            names.Each(x => to[x] = typeMap.TryGetValue(x, out typeName) ? typeName : defaultValue);
+            return to;
+        }        
     }
 }
