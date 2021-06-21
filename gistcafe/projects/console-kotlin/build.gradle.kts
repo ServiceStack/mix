@@ -1,6 +1,5 @@
 plugins {
     java
-    maven
     application
     kotlin("jvm") version "1.4.21"
 }
