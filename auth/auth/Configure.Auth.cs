@@ -12,7 +12,7 @@ namespace MyApp
     {
     }
     
-// Custom Validator to add custom validators to built-in /register Service requiring DisplayName and ConfirmPassword
+    // Custom Validator to add custom validators to built-in /register Service requiring DisplayName and ConfirmPassword
     public class CustomRegistrationValidator : RegistrationValidator
     {
         public CustomRegistrationValidator()
