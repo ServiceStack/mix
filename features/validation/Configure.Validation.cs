@@ -1,14 +1,16 @@
 using ServiceStack;
-using ServiceStack.Data;
 using ServiceStack.Validation;
+
+[assembly: HostingStartup(typeof(MyApp.ConfigureOpenApi))]
 
 namespace MyApp
 {
-    public class ConfigureValidation : IConfigureAppHost
+    public class ConfigureValidation : IHostingStartup
     {
-        public void Configure(IAppHost appHost)
-        {
-            appHost.Plugins.Add(new ValidationFeature());
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureAppHost(appHost => {
+                // ValidationFeature is pre-registered by default from v5.13 
+                // appHost.Plugins.Add(new ValidationFeature());
+            });
     }
 }

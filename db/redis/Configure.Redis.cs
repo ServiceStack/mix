@@ -1,24 +1,19 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using ServiceStack;
 using ServiceStack.Redis;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureRedis))]
+
 namespace MyApp
 {
-    public class ConfigureRedis : IConfigureServices, IConfigureAppHost
+    public class ConfigureRedis : IHostingStartup
     {
-        IConfiguration Configuration { get; }
-        public ConfigureRedis(IConfiguration configuration) => Configuration = configuration;
-
-        public void Configure(IServiceCollection services)
-        {
-            services.AddSingleton<IRedisClientsManager>(
-                new RedisManagerPool(Configuration.GetConnectionString("Redis") ?? "localhost:6379"));
-        }
-
-        public void Configure(IAppHost appHost)
-        {
-            appHost.GetPlugin<SharpPagesFeature>()?.ScriptMethods.Add(new RedisScripts());
-        }
-    }    
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices((context, services) => {
+                services.AddSingleton<IRedisClientsManager>(
+                    new RedisManagerPool(context.Configuration.GetConnectionString("Redis") ?? "localhost:6379"));
+            })
+            .ConfigureAppHost(afterConfigure:appHost => {
+                appHost.ScriptContext.ScriptMethods.Add(new RedisScripts());
+            });
+    }
 }

@@ -1,12 +1,14 @@
 using ServiceStack;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureServerEvents))]
+
 namespace MyApp
 {
-    public class ConfigureServerEvents : IConfigureAppHost
+    public class ConfigureServerEvents : IHostingStartup
     {
-        public void Configure(IAppHost appHost)
-        {
-            appHost.Plugins.Add(new ServerEventsFeature());
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureAppHost(appHost => {
+                appHost.Plugins.Add(new ServerEventsFeature());
+            });
     }
 }

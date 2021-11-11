@@ -1,29 +1,24 @@
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceStack;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using Marten;
+
+[assembly: HostingStartup(typeof(MyApp.ConfigureDb))]
 
 namespace MyApp
 {
-    public class ConfigureMarten : IConfigureServices
+    public class ConfigureDb : IHostingStartup
     {
-        public static List<StoreOptions> Options { get; } = new List<StoreOptions>();
-
-        IConfiguration Configuration { get; }
-        public ConfigureDb(IConfiguration configuration) => Configuration = configuration;
-
-        public void Configure(IServiceCollection services)
-        {
-            var store = DocumentStore.For(opts =>
-            {
-                opts.Connection(Configuration.GetConnectionString("Marten")
-                    ?? "host=localhost;username=test;password=test;database=marten");
-
-                Options.ForEach(fn => fn(opts));
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices((context, services) => {
+                var store = DocumentStore.For(opts => {
+                    opts.Connection(context.Configuration.GetConnectionString("Marten")
+                        ?? "host=localhost;username=test;password=test;database=marten");
+                    Options.ForEach(fn => fn(opts));
+                });
+                store.Advanced.Clean.CompletelyRemoveAll();
+                services.AddSingleton<IDocumentStore>(store);
             });
-            store.Advanced.Clean.CompletelyRemoveAll();
-            services.AddSingleton<IDocumentStore>(store);
-        }
-    }
+    }    
 }

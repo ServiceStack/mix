@@ -4,6 +4,8 @@ using ServiceStack;
 using ServiceStack.Messaging;
 using ServiceStack.RabbitMq;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureMq))]
+
 namespace MyApp
 {
     /**
@@ -11,20 +13,15 @@ namespace MyApp
         var mqServer = container.Resolve<IMessageService>();
         mqServer.RegisterHandler<MyRequest>(ExecuteMessage);
     */
-    public class ConfigureMq : IConfigureServices, IAfterInitAppHost
+    public class ConfigureMq : IHostingStartup
     {
-        IConfiguration Configuration { get; }
-        public ConfigureMq(IConfiguration configuration) => Configuration = configuration;
-
-        public void Configure(IServiceCollection services)
-        {
-            services.AddSingleton<IMessageService>(c => 
-                new RabbitMqServer(Configuration.GetConnectionString("RabbitMq") ?? "localhost:5672"));
-        }
-
-        public void AfterInit(IAppHost appHost)
-        {
-            appHost.Resolve<IMessageService>().Start();
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices((context, services) => {
+                services.AddSingleton<IMessageService>(c => 
+                    new RabbitMqServer(context.Configuration.GetConnectionString("RabbitMq") ?? "localhost:5672"));
+            })
+            .ConfigureAppHost(afterAppHostInit: appHost => {
+                appHost.Resolve<IMessageService>().Start();
+            });
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using ServiceStack.Host;
@@ -8,17 +5,19 @@ using ServiceStack.Model;
 using ServiceStack.Text;
 using ServiceStack.Web;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigurePostman))]
+
 namespace MyApp
 {
-    public class ConfigurePostman : IConfigureAppHost
+    public class ConfigurePostman : IHostingStartup
     {
-        public void Configure(IAppHost appHost)
-        {
-            appHost.Plugins.Add(new Postman2Feature());
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureAppHost(appHost => {
+                appHost.Plugins.Add(new PostmanFeature());
+            });
     }
     
-    public class Postman2Feature : IPlugin, IHasStringId
+    public class PostmanFeature : IPlugin, IHasStringId
     {
         public string Id { get; set; } = Plugins.Postman;
         public string AtRestPath { get; set; }
@@ -40,20 +39,20 @@ namespace MyApp
         /// </summary>
         public List<string> DefaultVerbsForAny { get; set; }
 
-        public Postman2Feature()
+        public PostmanFeature()
         {
             this.AtRestPath = "/postman";
             this.Headers = "Accept: " + MimeTypes.Json;
-            this.DefaultVerbsForAny = new List<string> { HttpMethods.Get };
+            this.DefaultVerbsForAny = new List<string> { ServiceStack.HttpMethods.Get };
             this.DefaultLabelFmt = new List<string> { "type" };
         }
 
         public void Register(IAppHost appHost)
         {
-            appHost.RegisterService<Postman2Service>(AtRestPath);
+            appHost.RegisterService<PostmanService>(AtRestPath);
 
             appHost.GetPlugin<MetadataFeature>()
-                   .AddPluginLink(AtRestPath.TrimStart('/'), "Postman Metadata");
+                .AddPluginLink(AtRestPath.TrimStart('/'), "Postman Metadata");
 
             if (EnableSessionExport == null)
                 EnableSessionExport = appHost.Config.DebugMode;
@@ -63,30 +62,30 @@ namespace MyApp
     [ExcludeMetadata]
     public class Postman
     {
-        public List<string> Label { get; set; }
+        public List<string>? Label { get; set; }
         public bool ExportSession { get; set; }
-        public string ssid { get; set; }
-        public string sspid { get; set; }
-        public string ssopt { get; set; }
+        public string? ssid { get; set; }
+        public string? sspid { get; set; }
+        public string? ssopt { get; set; }
     }
 
     public class PostmanCollectionInfo
     {
-        public string name { get; set; }
-        public string version { get; set; }
-        public string schema { get; set; }
+        public string? name { get; set; }
+        public string? version { get; set; }
+        public string? schema { get; set; }
     }
 
     public class PostmanCollection
     {
-        public PostmanCollectionInfo info { get; set; } = new PostmanCollectionInfo();
-        public List<PostmanRequest> item { get; set; }
+        public PostmanCollectionInfo info { get; set; } = new();
+        public List<PostmanRequest>? item { get; set; }
     }
 
     public class PostmanRequestBody
     {
         public string mode { get; set; } = "formdata";
-        public List<PostmanData> formdata { get; set; }
+        public List<PostmanData>? formdata { get; set; }
     }
 
     public class PostmanRequestUrl
@@ -134,17 +133,17 @@ namespace MyApp
 
     [DefaultRequest(typeof(Postman))]
     [Restrict(VisibilityTo = RequestAttributes.None)]
-    public class Postman2Service : Service
+    public class PostmanService : Service
     {
         [AddHeader(ContentType = MimeTypes.Json)]
         public object Any(Postman request)
         {
-            var feature = HostContext.GetPlugin<Postman2Feature>();
+            var feature = HostContext.GetPlugin<PostmanFeature>();
 
             if (request.ExportSession)
             {
                 if (feature.EnableSessionExport != true)
-                    throw new ArgumentException("Postman2Feature.EnableSessionExport is not enabled");
+                    throw new ArgumentException("PostmanFeature.EnableSessionExport is not enabled");
 
                 var url = Request.GetBaseUrl()
                     .CombineWith(Request.PathInfo)
@@ -155,7 +154,7 @@ namespace MyApp
                 return HttpResult.Redirect(url);
             }
 
-            var id = SessionExtensions.CreateRandomSessionId();
+            var id = ServiceStack.SessionExtensions.CreateRandomSessionId();
             var ret = new PostmanCollection
             {
                 info = new PostmanCollectionInfo()
@@ -173,7 +172,7 @@ namespace MyApp
         public List<PostmanRequest> GetRequests(Postman request, string parentId, IEnumerable<Operation> operations)
         {
             var ret = new List<PostmanRequest>();
-            var feature = HostContext.GetPlugin<Postman2Feature>();
+            var feature = HostContext.GetPlugin<PostmanFeature>();
 
             var headers = feature.Headers ?? ("Accept: " + MimeTypes.Json);
 
@@ -184,7 +183,7 @@ namespace MyApp
                     || request.ssid != null)
                 {
                     if (feature.EnableSessionExport != true)
-                        throw new ArgumentException("Postman2Feature.EnableSessionExport is not enabled");
+                        throw new ArgumentException("PostmanFeature.EnableSessionExport is not enabled");
                 }
 
                 if (request.ssopt != null)
@@ -252,20 +251,20 @@ namespace MyApp
                                     port = url.Port.ToString(),
                                     protocol = url.Scheme,
                                     path = url.LocalPath.SplitPaths(),
-                                    query = !HttpUtils.HasRequestBody(verb) 
+                                    query = (!HttpUtils.HasRequestBody(verb) 
                                         ? routeData.Select(x => x.key)
                                             .ApplyPropertyTypes(propertyTypes)
                                             .Map(x => new PostmanRequestKeyValue { key = x.Key, value = x.Value }) 
-                                        : null,
-                                    variable = restRoute.Variables.Any() 
+                                        : null)!,
+                                    variable = (restRoute.Variables.Any() 
                                         ? restRoute.Variables.Map(x => new PostmanRequestKeyValue { key = x }) 
-                                        : null
+                                        : null)!
                                 },
                                 method = verb,
                                 body = new PostmanRequestBody {
-                                    formdata = HttpUtils.HasRequestBody(verb)
-                                    ? routeData
-                                    : null,
+                                    formdata = (HttpUtils.HasRequestBody(verb)
+                                        ? routeData
+                                        : null)!,
                                 },
                                 header = headers,
                             },
@@ -297,22 +296,22 @@ namespace MyApp
                                 port = url.Port.ToString(),
                                 protocol = url.Scheme,
                                 path = url.LocalPath.SplitPaths(),
-                                query = !HttpUtils.HasRequestBody(verb) 
+                                query = (!HttpUtils.HasRequestBody(verb) 
                                     ? requestParams.Select(x => x.key)
                                         .Where(x => !x.StartsWith(":"))
                                         .ApplyPropertyTypes(propertyTypes)
                                         .Map(x => new PostmanRequestKeyValue { key = x.Key, value = x.Value }) 
-                                    : null,
-                                variable = url.Segments.Any(x => x.StartsWith(":")) 
+                                    : null)!,
+                                variable = (url.Segments.Any(x => x.StartsWith(":")) 
                                     ? url.Segments.Where(x => x.StartsWith(":"))
                                         .Map(x => new PostmanRequestKeyValue { key = x.Replace(":", ""), value = "" }) 
-                                    : null
+                                    : null)!
                             },
                             method = verb,
                             body = new PostmanRequestBody {
-                                formdata = HttpUtils.HasRequestBody(verb)
-                                ? requestParams
-                                : null,
+                                formdata = (HttpUtils.HasRequestBody(verb)
+                                    ? requestParams
+                                    : null)!,
                             },
                             header = headers,
                         },
@@ -323,7 +322,7 @@ namespace MyApp
             return ret;
         }
 
-        public string GetName(Postman2Feature feature, Postman request, Type requestType, string virtualPath)
+        public string GetName(PostmanFeature feature, Postman request, Type requestType, string virtualPath)
         {
             var fragments = request.Label ?? feature.DefaultLabelFmt;
             var sb = StringBuilderCache.Allocate();
@@ -360,7 +359,7 @@ namespace MyApp
             return path.Replace("{", ":").Replace("}", "").TrimEnd('*');
         }
 
-        public static string AsFriendlyName(this Type type, Postman2Feature feature)
+        public static string AsFriendlyName(this Type type, PostmanFeature feature)
         {
             var parts = type.Name.SplitOnFirst('`');
             var typeName = parts[0].LeftPart('[');
@@ -391,8 +390,7 @@ namespace MyApp
         public static List<PostmanData> ApplyPropertyTypes(this List<PostmanData> data,
             Dictionary<string, string> typeMap, string defaultValue = "")
         {
-            string typeName;
-            data.Each(x => x.value = typeMap.TryGetValue(x.key, out typeName) ? typeName : x.value ?? defaultValue);
+            data.Each(x => x.value = typeMap.TryGetValue(x.key, out var typeName) ? typeName : x.value ?? defaultValue);
             return data;
         }
         
@@ -401,8 +399,7 @@ namespace MyApp
             string defaultValue = "")
         {
             var to = new Dictionary<string, string>();
-            string typeName;
-            names.Each(x => to[x] = typeMap.TryGetValue(x, out typeName) ? typeName : defaultValue);
+            names.Each(x => to[x] = typeMap.TryGetValue(x, out var typeName) ? typeName : defaultValue);
             return to;
         }        
     }

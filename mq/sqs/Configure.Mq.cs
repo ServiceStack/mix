@@ -5,6 +5,8 @@ using ServiceStack.Messaging;
 using ServiceStack.Aws;
 using ServiceStack.Aws.Sqs;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureMq))]
+
 namespace MyApp
 {
     /**
@@ -12,25 +14,20 @@ namespace MyApp
         var mqServer = container.Resolve<IMessageService>();
         mqServer.RegisterHandler<MyRequest>(ExecuteMessage);
     */
-    public class ConfigureMq : IConfigureServices, IAfterInitAppHost
+    public class ConfigureMq : IHostingStartup
     {
-        IConfiguration Configuration { get; }
-        public ConfigureMq(IConfiguration configuration) => Configuration = configuration;
-
-        public void Configure(IServiceCollection services)
-        {
-            services.AddSingleton<IMessageService>(c => new SqsMqServer(
-                    Configuration["AwsAccessKey"],
-                    Configuration["AwsSecretKey"],
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices((context, services) => {
+                services.AddSingleton<IMessageService>(c => new SqsMqServer(
+                    context.Configuration["AwsAccessKey"],
+                    context.Configuration["AwsSecretKey"],
                     RegionEndpoint.USEast1) 
                 {
                     DisableBuffering = true, // Trade-off latency vs efficiency
                 });
-        }
-
-        public void AfterInit(IAppHost appHost)
-        {
-            appHost.Resolve<IMessageService>().Start();
-        }
-    }    
+            })
+            .ConfigureAppHost(afterAppHostInit: appHost => {
+                appHost.Resolve<IMessageService>().Start();
+            });
+    }
 }

@@ -2,6 +2,8 @@ using ServiceStack;
 using ServiceStack.Html;
 using NUglify;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureNUglify))]
+
 namespace MyApp
 {
     public class NUglifyJsMinifier : ICompressor
@@ -17,13 +19,13 @@ namespace MyApp
         public string Compress(string html) => Uglify.Html(html).Code;
     }
 
-    public class ConfigureNUglify : IConfigureAppHost
+    public class ConfigureNUglify : IHostingStartup
     {
-        public void Configure(IAppHost appHost)
-        {
-            Minifiers.JavaScript = new NUglifyJsMinifier();
-            Minifiers.Css = new NUglifyCssMinifier();
-            Minifiers.Html = new NUglifyHtmlMinifier();
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureAppHost(_ => {
+                Minifiers.JavaScript = new NUglifyJsMinifier();
+                Minifiers.Css = new NUglifyCssMinifier();
+                Minifiers.Html = new NUglifyHtmlMinifier();
+            });
     }
 }

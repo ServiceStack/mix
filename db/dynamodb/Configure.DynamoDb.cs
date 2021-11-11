@@ -6,22 +6,21 @@ using ServiceStack.Aws.DynamoDb;
 using Amazon;
 using Amazon.DynamoDBv2;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureDynamoDb))]
+
 namespace MyApp
 {
-    public class ConfigureDynamoDb : IConfigureServices
+    public class ConfigureDynamoDb : IHostingStartup
     {
-        IConfiguration Configuration { get; }
-        public ConfigureDynamoDb(IConfiguration configuration) => Configuration = configuration;
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices((context, services) => {
+                var awsDb = new AmazonDynamoDBClient("keyId","key", new AmazonDynamoDBConfig { 
+                    ServiceURL = context.Configuration.GetConnectionString("DynamoDb") ?? "http://localhost:8000"
+                });
+                var db = new PocoDynamo(awsDb);
 
-        public void Configure(IServiceCollection services)
-        {
-            var awsDb = new AmazonDynamoDBClient("keyId","key", new AmazonDynamoDBConfig { 
-                ServiceURL = Configuration.GetConnectionString("DynamoDb") ?? "http://localhost:8000"
+                services.AddSingleton<IAmazonDynamoDB>(awsDb);
+                services.AddSingleton<IPocoDynamo>(db);
             });
-            var db = new PocoDynamo(awsDb);
-
-            services.AddSingleton<IAmazonDynamoDB>(awsDb);
-            services.AddSingleton<IPocoDynamo>(db);
-        }
     }    
 }

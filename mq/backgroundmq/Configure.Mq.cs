@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using ServiceStack;
 using ServiceStack.Messaging;
 
+[assembly: HostingStartup(typeof(MyApp.ConfigureMq))]
+
 namespace MyApp
 {
     /**
@@ -10,16 +12,14 @@ namespace MyApp
         var mqServer = container.Resolve<IMessageService>();
         mqServer.RegisterHandler<MyRequest>(ExecuteMessage);
     */
-    public class ConfigureMq : IConfigureServices, IAfterInitAppHost
+    public class ConfigureMq : IHostingStartup
     {
-        public void Configure(IServiceCollection services)
-        {
-            services.AddSingleton<IMessageService>(c => new BackgroundMqService());
-        }
-
-        public void AfterInit(IAppHost appHost)
-        {
-            appHost.Resolve<IMessageService>().Start();
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices(services => {
+                services.AddSingleton<IMessageService>(c => new BackgroundMqService());
+            })
+            .ConfigureAppHost(afterAppHostInit: appHost => {
+                appHost.Resolve<IMessageService>().Start();
+            });
     }
 }

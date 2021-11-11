@@ -1,25 +1,16 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using ServiceStack;
+
+[assembly: HostingStartup(typeof(MyApp.ConfigureGrpc))]
 
 namespace MyApp
 {
-    [Priority(-1)]
-    public class ConfigureGrpc : IConfigureServices, IConfigureApp, IConfigureAppHost
+    public class ConfigureGrpc : IHostingStartup
     {
-        public void Configure(IServiceCollection services)
-        {
-            services.AddServiceStackGrpc();
-        }
-
-        public void Configure(IApplicationBuilder app)
-        {
-            app.UseRouting();
-        }
-
-        public void Configure(IAppHost appHost)
-        {
-            appHost.Plugins.Add(new GrpcFeature(appHost.GetApp()));
-        }
+        public void Configure(IWebHostBuilder builder) => builder
+            .ConfigureServices(services => services.AddServiceStackGrpc())
+            .Configure(app => app.UseRouting())
+            .ConfigureAppHost(appHost => {
+                appHost.Plugins.Add(new GrpcFeature(appHost.GetApp()));
+            });
     }
 }
