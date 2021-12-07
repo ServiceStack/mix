@@ -1,7 +1,7 @@
 using ServiceStack;
 using ServiceStack.Validation;
 
-[assembly: HostingStartup(typeof(MyApp.ConfigureOpenApi))]
+[assembly: HostingStartup(typeof(MyApp.ConfigureValidation))]
 
 namespace MyApp
 {
