@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  ${APP_NAME}:
+    image: ghcr.io/${IMAGE_REPO}:${RELEASE_VERSION}
+    restart: always
+    network_mode: bridge
+    ports:
+      - "80"
+    environment:
+      VIRTUAL_HOST: ${HOST_DOMAIN}
+      LETSENCRYPT_HOST: ${HOST_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    volumes:
+      - ${APP_NAME}-mydb:/app/App_Data
+  ${APP_NAME}-litestream:
+    image: litestream/litestream
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        /usr/local/bin/litestream restore -if-db-not-exists -o /data/MyApp.sqlite s3://ss-litestream/MyApp.sqlite
+        /usr/local/bin/litestream replicate /data/MyApp.sqlite s3://ss-litestream/MyApp.sqlite
+    environment:
+      LITESTREAM_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      LITESTREAM_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - ${APP_NAME}-mydb:/data
+
+volumes:
+  ${APP_NAME}-mydb:
