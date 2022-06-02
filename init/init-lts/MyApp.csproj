@@ -5,13 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Using Include="MyApp" />
+    <Using Include="ServiceStack" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.*" />
+    <PackageReference Include="ServiceStack" Version="6.*" />
   </ItemGroup>
 
 </Project>
