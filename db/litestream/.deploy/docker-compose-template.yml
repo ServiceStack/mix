@@ -17,8 +17,8 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        /usr/local/bin/litestream restore -if-db-not-exists -o /data/MyApp.sqlite s3://ss-litestream/MyApp.sqlite
-        /usr/local/bin/litestream replicate /data/MyApp.sqlite s3://ss-litestream/MyApp.sqlite
+        /usr/local/bin/litestream restore -if-db-not-exists -o /data/MyApp.sqlite s3://${AWS_S3_BUCKET}/MyApp.sqlite
+        /usr/local/bin/litestream replicate /data/MyApp.sqlite s3://${AWS_S3_BUCKET}/MyApp.sqlite
     environment:
       LITESTREAM_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       LITESTREAM_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
