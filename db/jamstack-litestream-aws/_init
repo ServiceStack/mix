@@ -1,0 +1,1 @@
+dotnet add api/MyApp/MyApp.csproj package ServiceStack.OrmLite.Sqlite
