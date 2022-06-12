@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="5.*" />
+    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="6.*" />
   </ItemGroup>
 
 </Project>
