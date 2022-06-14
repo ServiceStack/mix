@@ -3,7 +3,8 @@ services:
   ${APP_NAME}:
     image: ghcr.io/${IMAGE_REPO}:${RELEASE_VERSION}
     depends_on:
-      - ${APP_NAME}-litestream
+      ${APP_NAME}-litestream:
+        condition: service_healthy
     restart: always
     network_mode: bridge
     ports:
@@ -17,10 +18,13 @@ services:
   ${APP_NAME}-litestream:
     image: litestream/litestream
     entrypoint: ["/bin/sh", "-c"]
+    # Timeout of health check will need to depend on size of db, and speed of network to host.
+    healthcheck:
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -o /data/MyApp.sqlite s3://${AWS_S3_BUCKET}/MyApp.sqlite
+      timeout: 10m
+      retries: 1
     command:
-      - |
-        /usr/local/bin/litestream restore -if-db-not-exists -o /data/MyApp.sqlite s3://${AWS_S3_BUCKET}/MyApp.sqlite
-        /usr/local/bin/litestream replicate /data/MyApp.sqlite s3://${AWS_S3_BUCKET}/MyApp.sqlite
+      - /usr/local/bin/litestream replicate /data/MyApp.sqlite s3://${AWS_S3_BUCKET}/MyApp.sqlite
     environment:
       LITESTREAM_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       LITESTREAM_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}

@@ -22,7 +22,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
     healthcheck:
-      test: /usr/local/bin/litestream restore -if-db-not-exists -o /data/app.db sftp://${SFTP_USERNAME}:${SFTP_PASSWORD}@${SFTP_HOST}:${SFTP_PORT}/LitestreamViteTest.sqlite
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -o /data/app.db sftp://${SFTP_USERNAME}:${SFTP_PASSWORD}@${SFTP_HOST}:${SFTP_PORT}/LitestreamViteTest.sqlite
       timeout: 10m
       retries: 1
     command:
