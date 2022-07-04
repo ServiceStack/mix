@@ -11,9 +11,6 @@ namespace MyApp
             .ConfigureServices((context, services) => {
                 services.AddSingleton<IRedisClientsManager>(
                     new RedisManagerPool(context.Configuration.GetConnectionString("Redis") ?? "localhost:6379"));
-            })
-            .ConfigureAppHost(afterConfigure:appHost => {
-                appHost.ScriptContext.ScriptMethods.Add(new RedisScripts());
             });
     }
 }
