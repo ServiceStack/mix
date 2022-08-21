@@ -1,0 +1,5 @@
+debug false
+name Redis Web App
+redis.connection localhost:6379
+icon assets/img/redis.ico
+CefConfig { width:1150, height:1050 }
