@@ -31,6 +31,15 @@ services:
       LITESTREAM_AZURE_ACCOUNT_KEY: ${AZURE_ACCOUNT_KEY}
     volumes:
       - ${APP_NAME}-mydb:/data
+  ${APP_NAME}-migration:
+    image: ghcr.io/${IMAGE_REPO}:${RELEASE_VERSION}
+    restart: "no"
+    profiles:
+      - migration
+    command: --AppTasks=migrate
+    volumes:
+      - ${APP_NAME}-mydb:/app/App_Data
+
 
 volumes:
   ${APP_NAME}-mydb:

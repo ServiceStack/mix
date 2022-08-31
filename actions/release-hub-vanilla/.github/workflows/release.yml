@@ -68,6 +68,22 @@ jobs:
           echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_ENV
           echo "DEPLOY_USERNAME=${{ secrets.DEPLOY_USERNAME }}" >> $GITHUB_ENV
 
+      - name: Run remote db migrations
+        uses: appleboy/ssh-action@v0.1.4
+        env:
+          APPTOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 22
+          envs: APPTOKEN,USERNAME
+          script: |
+            echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
+            docker-compose -f ~/.deploy/${{ github.event.repository.name }}-docker-compose.yml pull
+            docker-compose -f ~/.deploy/${{ github.event.repository.name }}-docker-compose.yml up ${{ github.event.repository.name }}-migration
+
       - name: remote docker-compose up via ssh
         uses: appleboy/ssh-action@v0.1.4
         env:

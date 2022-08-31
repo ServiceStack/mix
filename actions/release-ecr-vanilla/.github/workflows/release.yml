@@ -69,8 +69,8 @@ jobs:
           HOST_DOMAIN: ${{ env.domain }}
           LETSENCRYPT_EMAIL: ${{ env.letsencrypt_email }}
         with:
-          input: deploy/docker-compose-template.yml
-          output: deploy/MyApp-docker-compose.yml
+          input: .deploy/docker-compose-template.yml
+          output: .deploy/MyApp-docker-compose.yml
 
       - name: copy compose file via scp
         uses: appleboy/scp-action@v0.1.1
@@ -79,7 +79,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "deploy/MyApp-docker-compose.yml"
+          source: ".deploy/MyApp-docker-compose.yml"
           target: "~/"
 
       - name: Set the value
@@ -104,4 +104,4 @@ jobs:
           envs: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION,ECR_ID
           script: |
             aws ecr get-login-password --region $AWS_REGION | docker login -u AWS --password-stdin $ECR_ID
-            docker-compose -f ~/deploy/MyApp-docker-compose.yml up -d
+            docker-compose -f ~/.deploy/MyApp-docker-compose.yml up -d
