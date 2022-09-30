@@ -7,33 +7,19 @@ using ServiceStack.OrmLite;
 
 [assembly: HostingStartup(typeof(MyApp.ConfigureDb))]
 
-namespace MyApp
-{
-    // Example Data Model
-    // public class MyTable
-    // {
-    //     [AutoIncrement]
-    //     public int Id { get; set; }
-    //     public string Name { get; set; }
-    // }
+namespace MyApp;
 
-    public class ConfigureDb : IHostingStartup
-    {
-        public void Configure(IWebHostBuilder builder) => builder
-            .ConfigureServices((context, services) => {
-                services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
-                    context.Configuration.GetConnectionString("DefaultConnection")
-                    ?? "Server=localhost;User Id=test;Password=test;Database=test;Pooling=true;MinPoolSize=0;MaxPoolSize=200",
-                    MySqlDialect.Provider));
-            });
-            /* Create non-existing Table and add Seed Data Example
-            .ConfigureAppHost(appHost => {
-                using var db = appHost.Resolve<IDbConnectionFactory>().Open();
-                if (db.CreateTableIfNotExists<MyTable>())
-                {
-                    db.Insert(new MyTable { Name = "Seed Data for new MyTable" });
-                }
-            });
-            */
-    }
+public class ConfigureDb : IHostingStartup
+{
+    public void Configure(IWebHostBuilder builder) => builder
+        .ConfigureServices((context, services) => {
+            services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
+                context.Configuration.GetConnectionString("DefaultConnection")
+                ?? "Server=localhost;User Id=test;Password=test;Database=test;Pooling=true;MinPoolSize=0;MaxPoolSize=200",
+                MySqlDialect.Provider));
+        })
+        .ConfigureAppHost(appHost => {
+            // Enable built-in Database Admin UI at /admin-ui/database
+            // appHost.Plugins.Add(new AdminDatabaseFeature());
+        });
 }
