@@ -1,0 +1,6 @@
+[
+    { "op":"add", "path":"/scripts/postinstall", "value":"dotnet run --AppTasks=migrate" },
+    { "op":"add", "path":"/scripts/migrate",     "value":"dotnet run --AppTasks=migrate" },
+    { "op":"add", "path":"/scripts/revert:last", "value":"dotnet run --AppTasks=migrate.revert:last" },
+    { "op":"add", "path":"/scripts/revert:all",  "value":"dotnet run --AppTasks=migrate.revert:all" },
+]
