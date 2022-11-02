@@ -97,7 +97,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./api/MyApp/wwwroot
+          publish_dir: ./MyApp/wwwroot
           user_name: 'GitHub Action'
           user_email: 'action@github.com'
 
