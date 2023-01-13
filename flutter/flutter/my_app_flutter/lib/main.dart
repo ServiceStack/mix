@@ -58,6 +58,18 @@ class HelloFlutterState extends State<HelloFlutter> {
   //State for this widget
   String result = "";
   var myController = TextEditingController();
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
 
   @override
   void initState() {
@@ -85,6 +97,13 @@ class HelloFlutterState extends State<HelloFlutter> {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headline4,
+              ),
               const Text('Hello API', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
               Container(
                   margin: const EdgeInsets.only(left:100.0,right:100.0),
@@ -97,10 +116,15 @@ class HelloFlutterState extends State<HelloFlutter> {
                 ),
               ),
               Text('Result: $result',
-              style: const TextStyle(fontStyle: FontStyle.italic),)
+              style: const TextStyle(fontStyle: FontStyle.italic),),
             ],
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
