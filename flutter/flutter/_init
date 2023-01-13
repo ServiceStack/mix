@@ -1,0 +1,3 @@
+flutter create my_app_flutter
+dart pub add servicestack --directory my_app_flutter
+dart pub get --directory my_app_flutter
