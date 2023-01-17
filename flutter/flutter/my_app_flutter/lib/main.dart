@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:servicestack/client.dart';
+import 'dart:io';
 
 import 'dtos.dart';
 
-const baseUrl = "https://localhost:5001";
+var baseUrl = "https://localhost:5001";
 
 var client = JsonServiceClient(baseUrl);
 
 void main() {
+  if (!kReleaseMode) {
+    HttpOverrides.global = MyHttpOverrides();
+    if(Platform.isAndroid) {
+      baseUrl = "http://10.0.2.2:5000";
+    } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      baseUrl = "https://localhost:5001";
+    } else if (Platform.isIOS) {
+      baseUrl = "https://localhost:5001";
+    }
+  }
   runApp(const MyApp());
 }
 
@@ -126,5 +138,15 @@ class HelloFlutterState extends State<HelloFlutter> {
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+/// Use only in debug to make it easy to access localhost API service.
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host,
+          int port) => true;
   }
 }
