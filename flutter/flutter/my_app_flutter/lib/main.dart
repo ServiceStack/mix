@@ -6,7 +6,7 @@ import 'dart:io';
 import 'dtos.dart';
 
 var baseUrl = "https://localhost:5001";
-var clientOptions = ClientOptions(baseUrl: baseUrl, ignoreCert: true);
+var clientOptions = ClientOptions(baseUrl: baseUrl);
 var client = ClientFactory.createWith(clientOptions);
 
 void main() {
