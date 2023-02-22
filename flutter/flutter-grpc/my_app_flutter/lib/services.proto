@@ -1,0 +1,83 @@
+/* Options:
+Date: 2023-02-20 10:01:02
+Version: 6.60
+Tip: To override a DTO option, remove "//" prefix before updating
+BaseUrl: https://localhost:5001
+
+//GlobalNamespace: 
+//AddDescriptionAsComments: True
+*/
+
+syntax = "proto3";
+
+service GrpcServices {
+
+    rpc GetHello(Hello) returns (HelloResponse) {}
+
+    rpc PostHello(Hello) returns (HelloResponse) {}
+
+    rpc PutHello(Hello) returns (HelloResponse) {}
+
+    rpc DeleteHello(Hello) returns (HelloResponse) {}
+
+    rpc ServerStreamFiles(StreamFiles) returns (stream FileContent) {}
+
+    rpc ServerStreamServerEvents(StreamServerEvents) returns (stream StreamServerEventsResponse) {}
+}
+
+message FileContent {
+   string Name = 1;
+   string Type = 2;
+   int32 Length = 3;
+   bytes Body = 4;
+   ResponseStatus ResponseStatus = 5;
+}
+message Hello {
+   string Name = 1;
+}
+message HelloResponse {
+   string Result = 1;
+   ResponseStatus ResponseStatus = 2;
+}
+message ResponseError {
+   string ErrorCode = 1;
+   string FieldName = 2;
+   string Message = 3;
+   map<string,string> Meta = 4;
+}
+message ResponseStatus {
+   string ErrorCode = 1;
+   string Message = 2;
+   string StackTrace = 3;
+   repeated ResponseError Errors = 4;
+   map<string,string> Meta = 5;
+}
+message StreamFiles {
+   repeated string Paths = 1;
+}
+message StreamServerEvents {
+   repeated string Channels = 1;
+}
+message StreamServerEventsResponse {
+   int64 EventId = 1;
+   string Channel = 2;
+   string Selector = 4;
+   string Json = 5;
+   string Op = 6;
+   string Target = 7;
+   string CssSelector = 8;
+   map<string,string> Meta = 9;
+   string UserId = 10;
+   string DisplayName = 11;
+   string ProfileUrl = 12;
+   bool IsAuthenticated = 13;
+   repeated string Channels = 14;
+   int64 CreatedAt = 15;
+   string Id = 21;
+   string UnRegisterUrl = 22;
+   string UpdateSubscriberUrl = 23;
+   string HeartbeatUrl = 24;
+   int64 HeartbeatIntervalMs = 25;
+   int64 IdleTimeoutMs = 26;
+   ResponseStatus ResponseStatus = 30;
+}

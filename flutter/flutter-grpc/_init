@@ -1,0 +1,5 @@
+flutter create my_app_flutter
+dart pub add servicestack --directory my_app_flutter
+dart pub add fixnum --directory my_app_flutter
+dart pub add protobuf --directory my_app_flutter
+dart pub add grpc --directory my_app_flutter
