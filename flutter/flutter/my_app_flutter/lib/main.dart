@@ -88,11 +88,12 @@ class HelloFlutterState extends State<HelloFlutter> {
     myController.addListener(callService);
   }
 
-  void callService() {
+  void callService() async {
     var text = myController.text.isEmpty ? "World" : myController.text;
-    client.get(Hello(name: text)).then((value) => setState(() {
-      result = value.result!;
-    }));
+    var response = await client.get(Hello(name: text));
+    setState(() {
+      result = response.result!;
+    });
   }
 
   @override
