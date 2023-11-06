@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Assign NetCoreTemplates directory
 export NETCORE_TEMPLATES_DIR=../../NetCoreTemplates
-export SHOULD_BRANCH=1
+export SHOULD_BRANCH=0
 export START_DIR=$(pwd)
 # Declare three lists of template names
 # Templates with DB migrations, array of strings
