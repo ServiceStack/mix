@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Assign NetCoreTemplates directory
-export NETCORE_TEMPLATES_DIR=../../NetCoreTemplates
+export NETCORE_TEMPLATES_DIR=$(realpath "../../NetCoreTemplates")
 export SHOULD_BRANCH=0
 export START_DIR=$(pwd)
 # Declare three lists of template names
@@ -49,7 +49,8 @@ do
         git checkout -b "sync-gh-actions"
         cd "$START_DIR"
     fi
-    cp -r actions/dotnet-docker-db "$NETCORE_TEMPLATES_DIR/$i"
+    echo "Copying to $NETCORE_TEMPLATES_DIR/$i/"
+    cp -a actions/dotnet-docker-db/. "$NETCORE_TEMPLATES_DIR/$i/"
     # If SHOULD_BRANCH is set to 1, commit the changes and push to the remote
     if [ "$SHOULD_BRANCH" -eq 1 ]; then
         cd "$NETCORE_TEMPLATES_DIR/$i"
@@ -70,7 +71,7 @@ do
         git checkout -b "sync-gh-actions"
         cd "$START_DIR"
     fi
-    cp -r actions/dotnet-docker "$NETCORE_TEMPLATES_DIR/$i"
+    cp -a actions/dotnet-docker/. "$NETCORE_TEMPLATES_DIR/$i/"
     # If SHOULD_BRANCH is set to 1, commit the changes and push to the remote
     if [ "$SHOULD_BRANCH" -eq 1 ]; then
         cd "$NETCORE_TEMPLATES_DIR/$i"
@@ -91,7 +92,7 @@ do
         git checkout -b "sync-gh-actions"
         cd "$START_DIR"
     fi
-    cp -r actions/dotnet-docker-cdn "$NETCORE_TEMPLATES_DIR/$i"
+    cp -a actions/dotnet-docker-cdn/. "$NETCORE_TEMPLATES_DIR/$i/"
     # If SHOULD_BRANCH is set to 1, commit the changes and push to the remote
     if [ "$SHOULD_BRANCH" -eq 1 ]; then
         cd "$NETCORE_TEMPLATES_DIR/$i"
