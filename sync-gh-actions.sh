@@ -6,8 +6,8 @@ export START_DIR=$(pwd)
 # Declare three lists of template names
 # Templates with DB migrations, array of strings
 export TEMPLATES_WITH_MIGRATIONS=(
-#    "blazor"
-#    "blazor-vue"
+    "blazor"
+    "blazor-vue"
 #    "blazor-wasm"
 #    "vue-mjs"
 #    "mvc-tailwind"
@@ -30,7 +30,7 @@ export TEMPLATES_WITHOUT_MIGRATIONS=(
 #    "parcel"
 #    "razor"
 #    "script"
-    "web"
+#    "web"
 )
 # Templates that use CDN/API split, array of strings
 export TEMPLATES_FOR_CDN=(
