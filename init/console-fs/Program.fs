@@ -21,7 +21,7 @@ module Program =
         let orgName = "dotnet"
         let orgRepos = 
             $"https://api.github.com/orgs/{orgName}/repos"
-                .GetJsonFromUrl(fun httpReq -> httpReq.UserAgent <- "gist.cafe")
+                .GetJsonFromUrl(fun c -> c.With(fun x -> x.UserAgent <- "gist.cafe") |> ignore)
                 .FromJson<GithubRepo[]>()
                 .OrderByDescending(fun x -> x.Watchers)
 

@@ -5,7 +5,7 @@ using ServiceStack.Text;
 var orgName = "dotnet";
 
 var orgRepos = $"https://api.github.com/orgs/{orgName}/repos"
-    .GetJsonFromUrl(httpReq => httpReq.UserAgent = "gist.cafe")
+    .GetJsonFromUrl(c => c.With(x => x.UserAgent = "gist.cafe"))
     .FromJson<GithubRepo[]>()
     .OrderByDescending(x => x.Watchers);
 

@@ -20,7 +20,7 @@ Module Program
         Dim orgName As String = "dotnet"
 
         Dim orgRepos = $"https://api.github.com/orgs/{orgName}/repos" _
-            .GetJsonFromUrl(Sub(httpReq) httpReq.UserAgent = "gist.cafe") _
+            .GetJsonFromUrl(Sub(c) c.With(Sub(x) x.UserAgent = "gist.cafe")) _
             .FromJson(Of GithubRepo())() _
             .OrderByDescending(Function(x) x.Watchers)
 

@@ -9,7 +9,7 @@ namespace MyApp
     {
         public void Configure(IWebHostBuilder builder) => builder
             .ConfigureServices((context, services) => {
-                services.AddSingleton<IRedisClientsManager>(new RedisManagerPool();
+                services.AddSingleton<IRedisClientsManager>(new RedisManagerPool());
             })
             .ConfigureAppHost(afterConfigure:appHost => {
                 appHost.ScriptContext.ScriptMethods.Add(new RedisScripts());
