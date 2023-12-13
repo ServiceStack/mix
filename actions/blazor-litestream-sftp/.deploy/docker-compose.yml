@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+  app:
+    image: ghcr.io/${IMAGE_REPO}:${RELEASE_VERSION}
+    restart: always
+    depends_on:
+      app-litestream:
+        condition: service_healthy
+    ports:
+      - "8080"
+    container_name: ${APP_NAME}_app
+    environment:
+      VIRTUAL_HOST: ${HOST_DOMAIN}
+      VIRTUAL_PORT: 8080 # New default ASP.NET port -> https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port
+      LETSENCRYPT_HOST: ${HOST_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    volumes:
+      - app-mydb:/app/App_Data
+
+  app-litestream:
+    image: litestream/litestream
+    entrypoint: ["/bin/sh", "-c"]
+    # Timeout of health check will need to depend on size of db, and speed of network to host.
+    healthcheck:
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -o /data/app.db sftp://${SFTP_USERNAME}:${SFTP_PASSWORD}@${SFTP_HOST}:${SFTP_PORT}/MyApp.sqlite
+      timeout: 10m
+      retries: 1
+    command:
+      - /usr/local/bin/litestream replicate /data/app.db sftp://${SFTP_USERNAME}:${SFTP_PASSWORD}@${SFTP_HOST}:${SFTP_PORT}/MyApp.sqlite
+    volumes:
+      - app-mydb:/data
+
+  app-migration:
+    image: ghcr.io/${IMAGE_REPO}:${RELEASE_VERSION}
+    restart: "no"
+    container_name: ${APP_NAME}_app_migration
+    profiles:
+      - migration
+    command: --AppTasks=migrate
+    volumes:
+      - app-mydb:/app/App_Data
+
+networks:
+  default:
+    external: true
+    name: nginx
+
+volumes:
+  app-mydb:
