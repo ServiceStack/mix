@@ -2,13 +2,12 @@ using ServiceStack;
 
 [assembly: HostingStartup(typeof(MyApp.ConfigureCors))]
 
-namespace MyApp
+namespace MyApp;
+
+public class ConfigureCors : IHostingStartup
 {
-    public class ConfigureCors : IHostingStartup
-    {
-        public void Configure(IWebHostBuilder builder) => builder
-            .ConfigureAppHost(appHost => {
-                appHost.Plugins.Add(new CorsFeature());
-            });
-    }
+    public void Configure(IWebHostBuilder builder) => builder
+        .ConfigureServices(services => {
+            services.AddPlugin(new CorsFeature());
+        });
 }

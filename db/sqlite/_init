@@ -1,1 +1,1 @@
-dotnet add package ServiceStack.OrmLite.Sqlite
+dotnet add package ServiceStack.OrmLite.Sqlite.Data
