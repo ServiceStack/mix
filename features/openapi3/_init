@@ -1,0 +1,3 @@
+dotnet add package Microsoft.AspNetCore.OpenApi
+dotnet add package Swashbuckle.AspNetCore
+dotnet add package ServiceStack.AspNetCore.OpenApi
