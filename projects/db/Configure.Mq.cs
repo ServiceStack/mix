@@ -7,7 +7,7 @@ namespace db
 {
     /**
       Register Services you want available via MQ in your AppHost, e.g:
-        var mqServer = container.Resolve<IMessageService>();
+        var mqServer = appHost.Resolve<IMessageService>();
         mqServer.RegisterHandler<MyRequest>(ExecuteMessage);
     */
     public class ConfigureMq : IConfigureServices, IAfterInitAppHost

@@ -40,7 +40,7 @@ namespace MyApp
     {
         public void Configure(IWebHostBuilder builder) => builder
             .ConfigureServices(services => services.AddSingleton<IAuthRepository>(c => 
-                new MongoDbAuthRepository(c.Resolve<IMongoDatabase>(), createMissingCollections:true)))
+                new MongoDbAuthRepository(c.GetRequiredService<IMongoDatabase>(), createMissingCollections:true)))
             .ConfigureAppHost(appHost => {
                 var authRepo = appHost.Resolve<IAuthRepository>();
                 authRepo.InitSchema();

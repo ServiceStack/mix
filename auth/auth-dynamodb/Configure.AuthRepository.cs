@@ -37,7 +37,7 @@ namespace MyApp
     {
         public void Configure(IWebHostBuilder builder) => builder
             .ConfigureServices(services => services.AddSingleton<IAuthRepository>(c =>
-                new DynamoDbAuthRepository<AppUser, UserAuthDetails>(c.Resolve<IPocoDynamo>())))
+                new DynamoDbAuthRepository<AppUser, UserAuthDetails>(c.GetRequiredService<IPocoDynamo>())))
             .ConfigureAppHost(appHost => {
                 var authRepo = appHost.Resolve<IAuthRepository>();
                 authRepo.InitSchema();

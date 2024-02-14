@@ -41,7 +41,7 @@ namespace MyApp
     {
         public void Configure(IWebHostBuilder builder) => builder
             .ConfigureServices(services => services.AddSingleton<IAuthRepository>(c =>
-                new RavenDbUserAuthRepository<AppUser, RavenUserAuthDetails>(c.Resolve<IDocumentStore>())))
+                new RavenDbUserAuthRepository<AppUser, RavenUserAuthDetails>(c.GetRequiredService<IDocumentStore>())))
             .ConfigureAppHost(appHost => {
                 var authRepo = appHost.Resolve<IAuthRepository>();
                 authRepo.InitSchema();

@@ -54,7 +54,7 @@ namespace MyApp
         public void Configure(IServiceCollection services)
         {
             services.AddSingleton<IAuthRepository>(c =>
-                new OrmLiteAuthRepository<AppUser, UserAuthDetails>(c.Resolve<IDbConnectionFactory>()) {
+                new OrmLiteAuthRepository<AppUser, UserAuthDetails>(c.GetRequiredService<IDbConnectionFactory>()) {
                     UseDistinctRoleTables = true
                 });            
         }

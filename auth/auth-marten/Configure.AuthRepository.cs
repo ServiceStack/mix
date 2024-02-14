@@ -50,7 +50,7 @@ namespace MyApp
 
         public void Configure(IWebHostBuilder builder) => builder
             .ConfigureServices(services => services.AddSingleton<IAuthRepository>(c =>
-                new MartenAuthRepository<AppUser, UserAuthDetails>(c.Resolve<IDocumentStore>())))
+                new MartenAuthRepository<AppUser, UserAuthDetails>(c.GetRequiredService<IDocumentStore>())))
             .ConfigureAppHost(appHost => {
                 var authRepo = appHost.Resolve<IAuthRepository>();
                 authRepo.InitSchema();

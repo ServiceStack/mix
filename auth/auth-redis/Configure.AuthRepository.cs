@@ -37,7 +37,7 @@ namespace MyApp
     {
         public void Configure(IWebHostBuilder builder) => builder
             .ConfigureServices(services => services.AddSingleton<IAuthRepository>(c =>
-                new RedisAuthRepository<AppUser, UserAuthDetails>(c.Resolve<IRedisClientsManager>())))
+                new RedisAuthRepository<AppUser, UserAuthDetails>(c.GetRequiredService<IRedisClientsManager>())))
             .ConfigureAppHost(appHost => {
                 var authRepo = appHost.Resolve<IAuthRepository>();
                 authRepo.InitSchema();
