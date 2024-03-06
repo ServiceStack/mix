@@ -1,1 +1,1 @@
-dotnet add package ServiceStack.OrmLite.SqlServer
+dotnet add package ServiceStack.OrmLite.SqlServer.Data
