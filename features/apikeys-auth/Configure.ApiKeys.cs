@@ -1,5 +1,6 @@
 using MyApp.Data;
 using ServiceStack;
+using ServiceStack.Auth;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack.Configuration;
@@ -13,6 +14,7 @@ public class ConfigureApiKeys : IHostingStartup
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices(services =>
         {
+            services.AddPlugin(new AuthFeature(new AuthSecretAuthProvider()));
             services.AddPlugin(new ApiKeysFeature
             {
                 // Optional: Available Scopes Admin Users can assign to any API Key
@@ -38,23 +40,10 @@ public class ConfigureApiKeys : IHostingStartup
         })
         .ConfigureAppHost(appHost =>
         {
+            appHost.Config.AdminAuthSecret = "p@55wOrd";
+            
             using var db = appHost.Resolve<IDbConnectionFactory>().Open();
             var apiKeysFeature = appHost.GetPlugin<ApiKeysFeature>();
             apiKeysFeature.InitSchema(db);
-            
-            // Optional: Create API Key for specified Users on Startup
-            if (apiKeysFeature.ApiKeyCount(db) == 0 && db.TableExists(IdentityUsers.TableName))
-            {
-                var createApiKeysFor = new [] { "admin@email.com", "manager@email.com" };
-                var users = IdentityUsers.GetByUserNames(db, createApiKeysFor);
-                foreach (var user in users)
-                {
-                    List<string> scopes = user.UserName == "admin@email.com"
-                        ? [RoleNames.Admin] 
-                        : [];
-                    apiKeysFeature.Insert(db, 
-                        new() { Name = "Seed API Key", UserId = user.Id, UserName = user.UserName, Scopes = scopes });
-                }
-            }
         });
 }
