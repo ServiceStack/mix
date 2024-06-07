@@ -43,7 +43,7 @@ public class ConfigureApiKeys : IHostingStartup
             appHost.Config.AdminAuthSecret = "p@55wOrd";
             
             using var db = appHost.Resolve<IDbConnectionFactory>().Open();
-            var apiKeysFeature = appHost.GetPlugin<ApiKeysFeature>();
-            apiKeysFeature.InitSchema(db);
+            var feature = appHost.GetPlugin<ApiKeysFeature>();
+            feature.InitSchema(db);
         });
 }

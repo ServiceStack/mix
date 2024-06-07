@@ -39,11 +39,11 @@ public class ConfigureApiKeys : IHostingStartup
         .ConfigureAppHost(appHost =>
         {
             using var db = appHost.Resolve<IDbConnectionFactory>().Open();
-            var apiKeysFeature = appHost.GetPlugin<ApiKeysFeature>();
-            apiKeysFeature.InitSchema(db);
+            var feature = appHost.GetPlugin<ApiKeysFeature>();
+            feature.InitSchema(db);
             
             // Optional: Create API Key for specified Users on Startup
-            if (apiKeysFeature.ApiKeyCount(db) == 0 && db.TableExists(IdentityUsers.TableName))
+            if (feature.ApiKeyCount(db) == 0 && db.TableExists(IdentityUsers.TableName))
             {
                 var createApiKeysFor = new [] { "admin@email.com", "manager@email.com" };
                 var users = IdentityUsers.GetByUserNames(db, createApiKeysFor);
@@ -52,7 +52,7 @@ public class ConfigureApiKeys : IHostingStartup
                     List<string> scopes = user.UserName == "admin@email.com"
                         ? [RoleNames.Admin] 
                         : [];
-                    apiKeysFeature.Insert(db, 
+                    feature.Insert(db, 
                         new() { Name = "Seed API Key", UserId = user.Id, UserName = user.UserName, Scopes = scopes });
                 }
             }
