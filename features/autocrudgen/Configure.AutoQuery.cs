@@ -12,6 +12,10 @@ public class ConfigureAutoQuery : IHostingStartup
                MaxLimit = 1000,
                 IncludeTotal = true,
                 GenerateCrudServices = new GenerateCrudServices {
+                    // Move Plugin registration to Configure.Db.cs if using Endpoint Routing, see:
+                    // https://docs.servicestack.net/autoquery/autogen#register-db-connection
+                    // DbFactory = dbFactory,
+
                     AutoRegister = true,
                     //AddDataContractAttributes = false,
                 }
