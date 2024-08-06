@@ -1,0 +1,11 @@
+{
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "DuckDB",
+            "name": "ollama-library.duckdb",
+            "database": "${workspaceFolder:pvq}/ollama-library.duckdb"
+        }
+    ]
+}
