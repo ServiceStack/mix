@@ -23,6 +23,7 @@ target/
 _build/
 deps/
 vendor/
+*.duckdb
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -345,3 +346,4 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+

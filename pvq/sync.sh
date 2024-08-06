@@ -1,0 +1,2 @@
+echo "SELECT id,url,short_desc FROM models" | duckdb ollama-library.duckdb -csv > ai-server/models.csv 
+echo "SELECT image,image_size FROM tags WHERE tag NOT LIKE '%-%' AND (image LIKE '%b')" | duckdb ollama-library.duckdb -csv > ai-server/tags.csv
