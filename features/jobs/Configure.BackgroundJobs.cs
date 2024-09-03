@@ -14,6 +14,7 @@ public class ConfigureBackgroundJobs : IHostingStartup
             services.AddPlugin(new BackgroundsJobFeature());
             services.AddHostedService<JobsHostedService>();
          }).ConfigureAppHost(afterAppHostInit: appHost => {
+            var services = appHost.GetApplicationServices();
             var jobs = services.GetRequiredService<IBackgroundJobs>();
             // Example of registering a Recurring Job to run Every Hour
             //jobs.RecurringCommand<MyCommand>(Schedule.Hourly);
