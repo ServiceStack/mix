@@ -1,18 +1,18 @@
 using ServiceStack;
 
-[assembly: HostingStartup(typeof(MyApp.ConfigureProfiling))]
+[assembly: HostingStartup(typeof(MyApp.ConfigureRequestLogs))]
 
 namespace MyApp;
 
-public class ConfigureProfiling : IHostingStartup
+public class ConfigureRequestLogs : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
             if (context.HostingEnvironment.IsDevelopment())
             {
-                services.AddPlugin(new ProfilingFeature
+                services.AddPlugin(new RequestLogsFeature
                 {
-                    IncludeStackTrace = true,
+                    EnableResponseTracking = true,
                 });
             }
         });
