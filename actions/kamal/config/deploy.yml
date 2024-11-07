@@ -37,7 +37,7 @@ builder:
   arch: amd64
 
 volumes:
-  - "/opt/docker/my-app/App_Data:/app/App_Data"
+  - "/opt/docker/MyApp/App_Data:/app/App_Data"
 
 #accessories:
 #  litestream:
