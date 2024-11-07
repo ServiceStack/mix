@@ -2,7 +2,7 @@
 service: my-app
 
 # Name of the container image.
-image: my-user/my-app
+image: my-user/myapp
 
 # Deploy to these servers.
 servers:
@@ -44,7 +44,7 @@ volumes:
 #    roles: ["web"]
 #    image: litestream/litestream
 #    files: ["config/litestream.yml:/etc/litestream.yml"]
-#    volumes: ["/opt/docker/my-app/App_Data:/data"]
+#    volumes: ["/opt/docker/MyApp/App_Data:/data"]
 #    cmd: replicate
 #    env:
 #      secret:
