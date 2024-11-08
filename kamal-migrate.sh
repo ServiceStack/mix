@@ -3,12 +3,6 @@
 # Exit on error
 set -e
 
-# Check for required environment variables
-if [ -z "$KAMAL_DEPLOY_IP" ]; then
-    echo "Error: KAMAL_DEPLOY_IP environment variable is not set"
-    exit 1
-fi
-
 # Function to validate input parameters
 validate_input() {
     if [ "$#" -ne 2 ]; then
@@ -145,7 +139,6 @@ set_github_secrets() {
     local repo=$2
 
     echo "Setting GitHub secrets..."
-    gh secret set KAMAL_DEPLOY_IP --body "$KAMAL_DEPLOY_IP" --repo "$org/$repo"
     gh secret set KAMAL_DEPLOY_HOST --body "$repo.web-templates.io" --repo "$org/$repo"
 }
 
