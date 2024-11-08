@@ -10,9 +10,7 @@
 ./kamal-migrate.sh NetCoreTemplates mvc
 ./kamal-migrate.sh NetCoreTemplates vue-mjs
 ./kamal-migrate.sh NetCoreTemplates blazor-vue
-./kamal-migrate.sh NetCoreTemplates razor-ssg
 ./kamal-migrate.sh NetCoreTemplates mvc-bootstrap
 ./kamal-migrate.sh NetCoreTemplates react-spa
 ./kamal-migrate.sh NetCoreTemplates razor-press
-./kamal-migrate.sh NetCoreTemplates razor-ssg
 
