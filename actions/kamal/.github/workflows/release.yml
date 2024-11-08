@@ -1,23 +1,22 @@
-name: Release and Deploy
+name: Release
 permissions:
   packages: write
   contents: write
 on:
   workflow_run:
-    workflows: ["Build"]
+    workflows: ["Build Container"]
     types:
       - completed
+    conclusion: success
   workflow_dispatch:
 
-# Only update envs here if you need to change them for this workflow
 env:
   DOCKER_BUILDKIT: 1
   KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
 
-# Standard steps for building and deploying a .NET app via Kamal
 jobs:
-  build-and-deploy:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -44,7 +43,6 @@ jobs:
             echo "HAS_DEPLOY_ACTION=false" >> $GITHUB_ENV
           fi
 
-        # This is where we switch the template values with deployment specific values. Safe to delete if you are use this as a template.
       - name: Modify deploy.yml
         if: env.HAS_DEPLOY_ACTION == 'true'
         run: |
@@ -60,27 +58,6 @@ jobs:
           registry: ghcr.io
           username: ${{ env.KAMAL_REGISTRY_USERNAME }}
           password: ${{ env.KAMAL_REGISTRY_PASSWORD }}
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0'
-
-      - name: Install x tool
-        run: dotnet tool install -g x
-
-      - name: Apply Production AppSettings
-        if: env.HAS_APPSETTINGS_PATCH == 'true'
-        working-directory: ./MyApp
-        run: |
-          cat <<EOF >> appsettings.json.patch
-          ${{ secrets.APPSETTINGS_PATCH }}
-          EOF
-          x patch appsettings.json.patch
-
-      - name: Build and push Docker image
-        run: |
-          dotnet publish --os linux --arch x64 -c Release -p:ContainerRepository=${{ env.image_repository_name }} -p:ContainerRegistry=ghcr.io -p:ContainerImageTags=latest -p:ContainerPort=80
 
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.9.0
