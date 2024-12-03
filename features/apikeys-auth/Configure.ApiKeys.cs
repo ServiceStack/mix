@@ -12,7 +12,11 @@ public class ConfigureApiKeys : IHostingStartup
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices(services =>
         {
-            services.AddPlugin(new AuthFeature(new AuthSecretAuthProvider("p@55wOrd")));
+            services.AddPlugin(new AuthFeature([
+                new ApiKeyCredentialsProvider(),
+                new AuthSecretAuthProvider("p@55wOrd"),
+            ]));
+            services.AddPlugin(new SessionFeature());
             services.AddPlugin(new ApiKeysFeature
             {
                 // Optional: Available Scopes Admin Users can assign to any API Key
