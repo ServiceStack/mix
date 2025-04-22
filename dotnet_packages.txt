@@ -1,0 +1,10 @@
+NUglify
+RavenDB.Client
+MongoDB.Driver
+RavenDB.Client
+MySql.EntityFrameworkCore
+Npgsql.EntityFrameworkCore.PostgreSQL
+Microsoft.EntityFrameworkCore.Sqlite
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.AspNetCore.OpenApi
+Swashbuckle.AspNetCore
