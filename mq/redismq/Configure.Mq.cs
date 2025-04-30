@@ -18,7 +18,7 @@ public class ConfigureMq : IHostingStartup
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
             services.AddSingleton<IMessageService>(c =>
-                new RedisMqServer(c.Resolve<IRedisClientsManager>()));
+                new RedisMqServer(c.GetRequiredService<IRedisClientsManager>()));
         })
         .ConfigureAppHost(afterAppHostInit: appHost => {
             appHost.Resolve<IMessageService>().Start();
