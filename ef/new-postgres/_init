@@ -1,0 +1,2 @@
+dotnet add package ServiceStack.OrmLite.PostgreSQL
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL

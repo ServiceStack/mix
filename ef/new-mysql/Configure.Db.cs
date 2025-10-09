@@ -1,9 +1,6 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ServiceStack;
-using ServiceStack.Data;
-using ServiceStack.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using ServiceStack.OrmLite;
+using MyApp.Data;
 
 [assembly: HostingStartup(typeof(MyApp.ConfigureDb))]
 
@@ -13,10 +10,10 @@ public class ConfigureDb : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
-            services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
-                context.Configuration.GetConnectionString("DefaultConnection")
-                ?? "Server=test;Database=test;UID=root;Password=test;SslMode=Required;AllowLoadLocalInfile=true;Convert Zero Datetime=True",
-                MySqlDialect.Provider));
+            var connectionString = context.Configuration.GetConnectionString("DefaultConnection")
+                ?? "Server=localhost;Database=test;UID=root;Password=test;SslMode=Required;AllowLoadLocalInfile=true;Convert Zero Datetime=True";
+            
+            services.AddOrmLite(options => options.UseMySql(connectionString));
 
             // $ dotnet ef migrations add CreateIdentitySchema
             // $ dotnet ef database update

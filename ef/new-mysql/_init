@@ -1,0 +1,2 @@
+dotnet add package ServiceStack.OrmLite.MySql
+dotnet add package MySql.EntityFrameworkCore

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using ServiceStack.Jobs;
 using MyApp.Data;
 using MyApp.ServiceInterface;
 

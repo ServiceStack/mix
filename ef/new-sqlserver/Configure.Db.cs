@@ -1,9 +1,7 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ServiceStack;
+using Microsoft.EntityFrameworkCore;
 using ServiceStack.Data;
-using ServiceStack.DataAnnotations;
 using ServiceStack.OrmLite;
+using MyApp.Data;
 
 [assembly: HostingStartup(typeof(MyApp.ConfigureDb))]
 
@@ -13,15 +11,15 @@ public class ConfigureDb : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
-            services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
-                context.Configuration.GetConnectionString("DefaultConnection")
-                ?? "Server=test;Database=test;UID=root;Password=test;SslMode=Required;AllowLoadLocalInfile=true;Convert Zero Datetime=True",
-                MySqlDialect.Provider));
+            var connectionString = context.Configuration.GetConnectionString("DefaultConnection")
+                ?? "Server=localhost;Database=test;User Id=test;Password=p@55wOrd;MultipleActiveResultSets=True;TrustServerCertificate=True;";
+            
+            services.AddOrmLite(options => options.UseSqlServer(connectionString));
 
             // $ dotnet ef migrations add CreateIdentitySchema
             // $ dotnet ef database update
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySQL(connectionString, b => b.MigrationsAssembly(nameof(MyApp))));
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly(nameof(MyApp))));
             
             // Enable built-in Database Admin UI at /admin-ui/database
             services.AddPlugin(new AdminDatabaseFeature());
