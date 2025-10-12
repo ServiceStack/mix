@@ -8,7 +8,7 @@ public class ConfigureRequestLogs : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
-            
+
             services.AddPlugin(new RequestLogsFeature {
                 RequestLogger = new DbRequestLogger {
                     // NamedConnection = "<alternative db>"
@@ -18,6 +18,11 @@ public class ConfigureRequestLogs : IHostingStartup
                 EnableErrorTracking = true
             });
             services.AddHostedService<RequestLogsHostedService>();
+
+            if (context.HostingEnvironment.IsDevelopment())
+            {
+                services.AddPlugin(new ProfilingFeature());
+            }
         });
 }
 
