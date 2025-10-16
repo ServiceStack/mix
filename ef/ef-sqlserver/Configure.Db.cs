@@ -12,10 +12,9 @@ public class ConfigureDb : IHostingStartup
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
             var connectionString = context.Configuration.GetConnectionString("DefaultConnection")
-                ?? "Server=localhost;Database=test;User Id=test;Password=test;MultipleActiveResultSets=True;TrustServerCertificate=True;";
+                ?? "Server=localhost;Database=test;User Id=test;Password=p@55wOrd;MultipleActiveResultSets=True;TrustServerCertificate=True;";
             
-            services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
-                connectionString, SqlServer2022Dialect.Provider));
+            services.AddOrmLite(options => options.UseSqlServer(connectionString));
 
             // $ dotnet ef migrations add CreateIdentitySchema
             // $ dotnet ef database update

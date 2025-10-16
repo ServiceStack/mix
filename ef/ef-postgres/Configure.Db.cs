@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ServiceStack.Data;
+using Microsoft.EntityFrameworkCore.Design;
 using ServiceStack.OrmLite;
 using MyApp.Data;
 
@@ -14,8 +14,10 @@ public class ConfigureDb : IHostingStartup
             var connectionString = context.Configuration.GetConnectionString("DefaultConnection")
                 ?? "Server=localhost;User Id=test;Password=test;Database=test;Pooling=true;MinPoolSize=0;MaxPoolSize=200";
             
-            services.AddSingleton<IDbConnectionFactory>(new OrmLiteConnectionFactory(
-                connectionString, PostgreSqlDialect.Provider));
+            services.AddOrmLite(options => options.UsePostgres(connectionString, dialect => {
+                    // dialect.NamingStrategy = new OrmLiteNamingStrategyBase();
+                })
+            );
 
             // $ dotnet ef migrations add CreateIdentitySchema
             // $ dotnet ef database update
@@ -25,4 +27,15 @@ public class ConfigureDb : IHostingStartup
             // Enable built-in Database Admin UI at /admin-ui/database
             services.AddPlugin(new AdminDatabaseFeature());
         });
+}
+
+// Used by dotnet ef
+public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+{
+    public ApplicationDbContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        optionsBuilder.UseNpgsql("", b => b.MigrationsAssembly(nameof(MyApp)));
+        return new ApplicationDbContext(optionsBuilder.Options);
+    }
 }
