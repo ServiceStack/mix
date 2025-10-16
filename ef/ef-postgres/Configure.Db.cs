@@ -14,10 +14,7 @@ public class ConfigureDb : IHostingStartup
             var connectionString = context.Configuration.GetConnectionString("DefaultConnection")
                 ?? "Server=localhost;User Id=test;Password=test;Database=test;Pooling=true;MinPoolSize=0;MaxPoolSize=200";
             
-            services.AddOrmLite(options => options.UsePostgres(connectionString, dialect => {
-                    // dialect.NamingStrategy = new OrmLiteNamingStrategyBase();
-                })
-            );
+            services.AddOrmLite(options => options.UsePostgres(connectionString));
 
             // $ dotnet ef migrations add CreateIdentitySchema
             // $ dotnet ef database update
