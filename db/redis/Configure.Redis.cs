@@ -11,9 +11,8 @@ public class ConfigureRedis : IHostingStartup
         .ConfigureServices((context, services) => {
             services.AddSingleton<IRedisClientsManager>(
                 new RedisManagerPool(context.Configuration.GetConnectionString("Redis") ?? "localhost:6379"));
-        })
-        .ConfigureAppHost(appHost => {
+
             // Enable built-in Redis Admin UI at /admin-ui/redis
-            // appHost.Plugins.Add(new AdminRedisFeature());
+            services.AddPlugin(new AdminRedisFeature());
         });
 }
