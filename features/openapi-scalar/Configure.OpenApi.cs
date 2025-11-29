@@ -5,6 +5,9 @@ using ServiceStack;
 
 namespace MyApp;
 
+//TODO: Fix build error by adding to <PropertyGroup> https://github.com/dotnet/roslyn/issues/74511
+// <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated</InterceptorsNamespaces>
+
 public class ConfigureOpenApi : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder) => builder
@@ -12,7 +15,7 @@ public class ConfigureOpenApi : IHostingStartup
             if (context.HostingEnvironment.IsDevelopment())
             {
                 services.AddOpenApi();
-                services.AddServiceStackOpenApi();
+                services.AddServiceStackOpenApi();                
                 // services.AddBasicAuth<Data.ApplicationUser>();
                 // services.AddApiKeys();
                 // services.AddJwtAuth();
@@ -35,4 +38,3 @@ public class ConfigureOpenApi : IHostingStartup
         };
     }
 }
-

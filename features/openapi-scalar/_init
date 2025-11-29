@@ -1,0 +1,2 @@
+dotnet add package Scalar.AspNetCore
+dotnet add package ServiceStack.OpenApi.Microsoft
