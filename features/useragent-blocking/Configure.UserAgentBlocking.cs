@@ -10,7 +10,9 @@ public class UserAgentBlockingOptions
     /// <summary>
     /// List of user agents to block (supports exact matches or substring matches)
     /// </summary>
-    public List<string> BlockedUserAgents { get; set; } = new();
+    public List<string> BlockedUserAgents { get; set; } = [];
+
+    public List<string> BlockedIps { get; set; } = [];
 
     /// <summary>
     /// HTTP status code to return when a user agent is blocked (defaults to 403 Forbidden)
@@ -50,6 +52,26 @@ public class UserAgentBlockingMiddleware(
             throw new ArgumentNullException(nameof(context));
         }
 
+        // Get the client IP address
+        var remoteIp = context.Connection.RemoteIpAddress?.ToString();
+
+        // Check if the IP should be blocked
+        if (ShouldBlockIp(remoteIp))
+        {
+            if (Options.LogBlockedRequests)
+            {
+                logger.LogInformation(
+                    "Request blocked from IP: {IPAddress}, Path: {Path}",
+                    remoteIp,
+                    context.Request.Path);
+            }
+
+            context.Response.StatusCode = Options.BlockedStatusCode;
+            context.Response.ContentType = "text/plain";
+            await context.Response.WriteAsync(Options.BlockedMessage);
+            return;
+        }
+
         // Get the User-Agent header
         string userAgent = context.Request.Headers["User-Agent"].ToString();
 
@@ -62,7 +84,7 @@ public class UserAgentBlockingMiddleware(
                 logger.LogInformation(
                     "Request blocked from user agent: {UserAgent}, IP: {IPAddress}, Path: {Path}",
                     userAgent,
-                    context.Connection.RemoteIpAddress,
+                    remoteIp,
                     context.Request.Path);
             }
 
@@ -97,6 +119,21 @@ public class UserAgentBlockingMiddleware(
             if (userAgent.Contains(blockedAgent, comparison))
                 return true;
             if (blockedAgent.Contains(' ') && userAgent.Contains(blockedAgent.Replace(" ",""), comparison))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool ShouldBlockIp(string? ipAddress)
+    {
+        if (string.IsNullOrEmpty(ipAddress))
+            return false;
+
+        foreach (var blockedIp in Options.BlockedIps)
+        {
+            // Support partial IP matching (e.g., "114.119" blocks all IPs starting with "114.119")
+            if (ipAddress.StartsWith(blockedIp, StringComparison.Ordinal))
                 return true;
         }
 
