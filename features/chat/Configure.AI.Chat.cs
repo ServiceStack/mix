@@ -27,7 +27,7 @@ public class ConfigureAiChat : IHostingStartup
                     EnableFilesystemTools = true,
                 },
                 // Share your best Projects, Threads or AI Media with everyone
-                // Publish = { Enabled = true },
+                // ShareLlmspy = { Enabled = true },
 #endif
                 
                 // Expose APIs with these tags to API & MCP Tools
